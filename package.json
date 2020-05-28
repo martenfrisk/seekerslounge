@@ -6,16 +6,21 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "algoliasearch": "^4.2.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
+    "react-instantsearch-dom": "^6.5.0",
+    "react-scripts": "3.4.1",
+    "tailwindcss": "^1.4.6"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build:css": "postcss src/assets/tailwind.css -o src/assets/styles.css",
+    "watch:css": "postcss src/assets/tailwind.css -o src/assets/styles.css",
+    "start": "yarn run watch:css & react-scripts start",
+    "build": "yarn run build:css react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
-  },
+ },
   "eslintConfig": {
     "extends": "react-app"
   },
@@ -30,5 +35,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "autoprefixer": "^9.8.0",
+    "postcss-cli": "^7.1.1"
   }
 }
