@@ -4,31 +4,37 @@ import { InstantSearch, Hits, SearchBox, Pagination, Highlight, CurrentRefinemen
 import PropTypes from 'prop-types'
 import './App.css'
 import Pot from './img/coffee.svg'
+import qs from 'qs'
 
 const searchClient = algoliasearch('ZJ3KVLVEMJ', '06e8752d09f90a97299b0954aa15a635')
 
+const DEBOUNCE_TIME = 400;
 
-// const RefinementList = ({ currentRefinement, searchForItems, isFromSearch, items, createURL, refine }) => (
-// 	<div>
-// 	<ul className="flex flex-wrap w-3/4 mx-auto my-0">
-// 		{items.map(item => (
-// 			<li key={item.label} className="h-6 px-3 py-1 mt-2 mr-2 text-xs bg-blue-200 rounded-lg">
-		
-// 				<a href={createURL(item.value)} style={{ fontWeight: item.isRefined ? 'bold' : '' }}    onClick={event => {
-// 					event.preventDefault();
-// 					refine(item.value);
-// 				}}>
-// 			{item.label}{' '}({item.count})
-// 				</a>
-// 			</li>
-// 		))}
-// 	</ul>
-// 	</div>
-// );
 
-// const CustomRefinementList = connectRefinementList(RefinementList);
+const createURL = state => `?${qs.stringify(state)}`;
 
-const App = () => {
+const searchStateToUrl = (props, searchState) =>
+  searchState ? `${props.location.pathname}${createURL(searchState)}` : '';
+	
+const urlToSearchState = location => qs.parse(location.search.slice(1));
+
+
+const App = ({history, location}) => {
+	
+
+	const [searchState, setSearchState] = useState(urlToSearchState(location));
+	const [debouncedSetState, setDebouncedSetState] = useState(null);
+	const onSearchStateChange = updatedSearchState => {
+    clearTimeout(debouncedSetState);
+
+    setDebouncedSetState(
+      setTimeout(() => {
+        history.push(searchStateToUrl(updatedSearchState), updatedSearchState);
+      }, DEBOUNCE_TIME)
+    );
+
+    setSearchState(updatedSearchState);
+  };
 	const [ infoView, setInfoView ] = useState(true)
 	const [ moreInfo, setMoreInfo ] = useState(false)
 	const [ copyright, setCopyright ] = useState(false)
@@ -41,7 +47,7 @@ const App = () => {
 					<div className="flex items-end justify-end h-40 pr-3 mt-0 text-2xl text-gray-800 bg-blue-300">
 					<Coffee />
 					<div className="flex flex-col justify-end">
-						<a href="/" className="text-gray-700">Seekers&apos; Lounge</a>
+						<a href="/seekerslounge/" className="text-gray-700">Seekers&apos; Lounge</a>
 						<div className="text-xs text-blue-900">a Teachers' Lounge search engine</div>
 
 					</div>
@@ -53,15 +59,18 @@ const App = () => {
 					<p>
 							Currently includes all episodes up to season 5. <br />
 							<br />
-							Transcripts are unedited and the speaker has not been identified. Intro has been removed so add 30 seconds for accurate timestamp.
+							Transcripts are unedited and the speakers have not been correctly identified. Intro has been removed so add 30 seconds for accurate timestamp.
+							<br /><br />
+							Uncommon words and names such as "Podd Tadre" may not show up correctly because the results have been automatically transcribed. 
 						</p>
 						<Timeline />
 						
 
 						<p>
-							Want to help out? Click <div onClick={handleMoreInfo} className="inline-block border-b border-dotted cursor-pointer">here&nbsp;&#9662;</div></p>{moreInfo && <div className="text-sm">You can find the unedited transcripts here: <br />Edit the text and
-							submit a pull request.<br />
-							<p className="italic">"What's a pull request?"</p>Just edit the transcript and message me on reddit, at u/martanor. </div>}
+							Want to help out? Click <div onClick={handleMoreInfo} className="inline-block border-b border-dotted cursor-pointer">here&nbsp;&#9662;</div></p>{moreInfo && <div className="text-sm">You can find the unedited transcripts here: <a className="text-xs text-blue-600" href="https://github.com/martenfrisk/seekerslounge/tree/master/transcripts">github.com/martenfrisk/seekerslounge/tree/master/transcripts</a><br />Edit the text and
+							submit a pull request.<br /><br />
+							<p className="italic">"What's a pull request?"</p>You can just save and edit the transcript and message me on reddit (u/martanor) with a link to a pastebin or google doc.<br/><br />
+							Remember that every line needs a unique objectID which is formatted as <br /><code>[season, one integer][episode, two integers starting at 01][incrementing number starting at 0]</code>. For season one, episode one, the objectID starts at 1010, then 1011 and so on.<br /><br /> ObjectID for minis are <br /><code>m[episode number, two integers][incrementing number starting at 00]</code>, for example m0700, m0701... for episode 7. </div>}
 						
 						<div onClick={handleCopyright} className="inline-block border-b border-dotted cursor-pointer">Copyright information&nbsp;&#9662;</div>
 						{copyright && <><p>No copyright infringement intended. All rights belong to their respective rights holders (probably Big Grande and Earwolf). Want to contact me? I'll see your ass in court (or message me on reddit, u/martanor)</p>
@@ -76,6 +85,9 @@ const App = () => {
 							<div className="search-panel__results">
 								<SearchBox
 									className="flex justify-center w-full pt-5 md:pt-10"
+									searchState={searchState}
+									onSearchStateChange={onSearchStateChange}
+									createURL={createURL}
 									translations={{
 										placeholder: 'Search...'
 									}}
@@ -96,8 +108,12 @@ const App = () => {
 	}
 
 
-
-
+	App.propTypes = {
+		history: PropTypes.shape({
+			push: PropTypes.func.isRequired,
+		}),
+		location: PropTypes.object.isRequired,
+	};
 
 
 const Coffee = () => {
