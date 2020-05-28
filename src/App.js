@@ -14,7 +14,7 @@ const DEBOUNCE_TIME = 400;
 const createURL = state => `?${qs.stringify(state)}`;
 
 const searchStateToUrl = (props, searchState) =>
-  searchState ? `${props.location.pathname}${createURL(searchState)}` : '';
+  searchState ? `${props.location.pathname}/${createURL(searchState)}` : '';
 	
 const urlToSearchState = location => qs.parse(location.search.slice(1));
 
@@ -41,6 +41,10 @@ const App = ({history, location}) => {
 	const handleInfoView = () => setInfoView((prev) => !prev)
 	const handleMoreInfo = () => setMoreInfo((prev) => !prev)
 	const handleCopyright = () => setCopyright((prev) => !prev)
+	const randomQuery = ['guinness', 'ridiculous voice', 'bronco', 'lasagna', 'big nightmare', 'el chapo', 'cheetahman', 'see you in court', 'sully', 'bottomless piggybank','scarecrow', 'Wimberley', 'tricky dick', 'picasso', 'groteque genitals', 'bethany hart', 'morrissey', 'goths', 'famously']
+	function getRandomInt(max) {
+		return Math.floor(Math.random() * Math.floor(max));
+	}
 		return (
 			<div className="flex flex-col py-0 md:flex-row">
 				<div className="w-full py-0 mt-0 md:mb-0 md:w-1/4 md:max-w-sm ">
@@ -85,6 +89,7 @@ const App = ({history, location}) => {
 							<div className="search-panel__results">
 								<SearchBox
 									className="flex justify-center w-full pt-5 md:pt-10"
+									defaultRefinement={randomQuery[getRandomInt(randomQuery.length)]}
 									searchState={searchState}
 									onSearchStateChange={onSearchStateChange}
 									createURL={createURL}
