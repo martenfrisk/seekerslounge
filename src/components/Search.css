@@ -82,3 +82,12 @@ a:visited{
 .ais-Pagination-item{
     margin: 5px
 }
+
+li {
+    margin: 1rem 2rem;
+    width: 90%;
+}
+
+.highlight {
+    color: red;
+}

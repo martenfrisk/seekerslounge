@@ -1,6 +1,6 @@
 import React from 'react'
 import algoliasearch from 'algoliasearch'
-import { InstantSearch, SearchBox, Hits, Highlight, Stats, SortBy, Pagination } from 'react-instantsearch-dom'
+import { InstantSearch, SearchBox, Hits, Stats, SortBy, Pagination } from 'react-instantsearch-dom'
 import './Search.css'
 
 const searchClient = algoliasearch('ZJ3KVLVEMJ', '06e8752d09f90a97299b0954aa15a635')
@@ -24,18 +24,18 @@ const Header = () => {
 	)
 }
 
-const Hit = ({ hit }) => {
-  return (
-    <a href={'/'}>
-      <div className="card">
-        <div className="card-contents">
-          <Highlight attribute="line" hit={hit} />
-          <div className="card-line">{hit}</div>
-        </div>
-      </div>
-    </a>
-  )
-}
+// const Hit = ({ hit }) => {
+//   return (
+//     <a href={'/'}>
+//       <div className="card">
+//         <div className="card-contents">
+//           <Highlight attribute="line" hit={hit} />
+//           <div className="card-line">{hit}</div>
+//         </div>
+//       </div>
+//     </a>
+//   )
+// }
 
 const Content = () => {
   return (

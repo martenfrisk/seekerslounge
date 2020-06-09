@@ -4,13 +4,13 @@ import './assets/styles.css'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
+import Searchtest from './Searchtest'
 
 ReactDOM.render(
-	<React.StrictMode>
-		<Router>
-			<Route path="/" component={App} />
-		</Router>
-	</React.StrictMode>,
+		<Router basename="/teachers">
+			<Route exact path="/" component={App} />
+			<Route path="/test" component={Searchtest} />
+		</Router>,
 	document.getElementById('root')
 )
 
