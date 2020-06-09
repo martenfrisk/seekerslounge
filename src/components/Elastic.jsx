@@ -77,7 +77,6 @@ const Elastic = () => {
 
 	return (
 		<div>
-			<h1>AutoComplete Demo</h1>
 			<Autosuggest
 				suggestions={suggestions}
 				onSuggestionsFetchRequested={onSuggestionsFetchRequested}

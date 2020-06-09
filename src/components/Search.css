@@ -91,3 +91,9 @@ li {
 .highlight {
     color: red;
 }
+
+.react-autosuggest__input {
+    width: 90%;
+    min-width: 90%;
+    margin: 0 1rem;
+}
