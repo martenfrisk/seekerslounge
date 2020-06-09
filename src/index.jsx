@@ -4,12 +4,11 @@ import './assets/styles.css'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
-import Searchtest from './Searchtest'
+// import Searchtest from './Searchtest'
 
 ReactDOM.render(
-		<Router basename="/teachers">
-			<Route exact path="/" component={App} />
-			<Route path="/test" component={Searchtest} />
+		<Router>
+			<Route path="/" component={App} />
 		</Router>,
 	document.getElementById('root')
 )
