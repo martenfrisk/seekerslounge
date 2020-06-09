@@ -4,14 +4,6 @@ object-assign
 @license MIT
 */
 
-/*!
-  Copyright (c) 2017 Jed Watson.
-  Licensed under the MIT License (MIT), see
-  http://jedwatson.github.io/classnames
-*/
-
-/*! algoliasearch-lite.umd.js | 4.2.0 | © Algolia, inc. | https://github.com/algolia/algoliasearch-client-javascript */
-
 /** @license React v0.19.1
  * scheduler.production.min.js
  *
