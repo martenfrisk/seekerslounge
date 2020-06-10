@@ -31,7 +31,7 @@ const Sidebar = () => {
 				{infoView && (
 					<div>
 						<p>
-							Currently includes all episodes up to season 5. <br />
+							Currently includes all episodes (regular and mini) excluding season 9. <br />
 							<br />
 							Transcripts are unedited and the speakers have not been correctly identified. Intro has been
 							removed so add 30 seconds for accurate timestamp.
@@ -66,14 +66,6 @@ const Sidebar = () => {
 								transcript and message me on reddit (u/martanor) with a link to a pastebin or google
 								doc.<br />
 								<br />
-								Remember that every line needs a unique objectID which is formatted as <br />
-								<code>
-									[season, one integer][episode, two integers starting at 01][incrementing number
-									starting at 0]
-								</code>. For season one, episode one, the objectID starts at 1010, then 1011 and so on.<br />
-								<br /> ObjectID for minis are <br />
-								<code>m[episode number, two integers][incrementing number starting at 00]</code>, for
-								example m0700, m0701... for episode 7.{' '}
 							</div>
 						)}
 
