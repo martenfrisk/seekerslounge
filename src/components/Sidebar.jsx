@@ -216,15 +216,15 @@ const Timeline = () => {
 					<span className="bubble" />
 					5
 				</li>
-				<li>
+				<li className="completed">
 					<span className="bubble" />
 					6
 				</li>
-				<li>
+				<li className="completed">
 					<span className="bubble" />
 					7
 				</li>
-				<li>
+				<li className="completed">
 					<span className="bubble" />
 					8
 				</li>
