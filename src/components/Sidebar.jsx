@@ -1,14 +1,17 @@
 import React, { useState } from 'react'
 import Pot from '../img/coffee.svg'
 import '../App.css'
+import Episodes from '../assets/episodes.json'
 
 const Sidebar = () => {
 	const [ infoView, setInfoView ] = useState(true)
 	const [ moreInfo, setMoreInfo ] = useState(false)
 	const [ copyright, setCopyright ] = useState(false)
+	const [ eps, setEps ] = useState(false)
 	const handleInfoView = () => setInfoView((prev) => !prev)
 	const handleMoreInfo = () => setMoreInfo((prev) => !prev)
 	const handleCopyright = () => setCopyright((prev) => !prev)
+	const handleEps = () => setEps((prev) => !prev)
 
 	return (
 		<div className="w-full py-0 mt-0 md:mb-0 md:w-1/4 md:max-w-sm ">
@@ -72,6 +75,7 @@ const Sidebar = () => {
 						<div onClick={handleCopyright} className="inline-block border-b border-dotted cursor-pointer">
 							Copyright information&nbsp;&#9662;
 						</div>
+						<br />
 						{copyright && (
 							<div>
 								<p>
@@ -81,6 +85,13 @@ const Sidebar = () => {
 								</p>
 								<p>Build with React, powered by Algolia Search, styled using Tailwind CSS.</p>
 							</div>
+						)}
+
+						<div onClick={handleEps} className="inline-block border-b border-dotted cursor-pointer">
+							Episode list&nbsp;&#9662;
+						</div>
+						{eps && (
+							<EpList />
 						)}
 					</div>
 				)}
@@ -182,6 +193,21 @@ const Coffee = () => {
 	)
 }
 
+const EpList = () => {
+return (
+	<div>
+		List of episodes:
+		{Episodes.map(item => {
+			return (
+				<div className="flex flex-wrap my-2">
+					<div className="mr-1 text-xs">{item.ep}</div>
+					<div className="text-sm">{item.title}</div>
+				</div>)
+		})}
+	</div>
+)
+}
+
 const Timeline = () => {
 	return (
 		<div>
@@ -224,7 +250,7 @@ const Timeline = () => {
 					<span className="bubble" />
 					9
 				</li>
-				<li>
+				<li className="completed">
 					<span className="bubble" />
 					minis
 				</li>

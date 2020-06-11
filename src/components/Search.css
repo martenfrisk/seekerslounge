@@ -84,16 +84,25 @@ a:visited{
 }
 
 li {
-    margin: 1rem 2rem;
+    margin: 1rem;
     width: 90%;
 }
 
 .highlight {
-    color: red;
+    color: rgb(55, 112, 177);
+    font-weight: 600;
+    text-decoration: underline;
 }
 
 .react-autosuggest__input {
     width: 90%;
     min-width: 90%;
     margin: 0 1rem;
+    padding: 1rem;
+    border: 0.5px solid rgba(149, 149, 149, 0.7);
+    border-radius: 0;
 }
+
+.react-autosuggest__container {
+    margin-top: 0.25rem;
+    }

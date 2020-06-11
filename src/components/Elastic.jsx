@@ -19,10 +19,11 @@ const randomQuery = [
 	'sully',
 	'bottomless piggybank',
 	'scarecrow',
+	'south pole santa',
 	'Wimberley',
 	'tricky dick',
 	'picasso',
-	'groteque genitals',
+	'grotesque genitals',
 	'bethany hart',
 	'morrissey',
 	'goths',
@@ -44,13 +45,12 @@ const Elastic = () => {
 		let epClean = suggestion.episode.replace('.json', '')
 		let epName = epList.find((x) => x.ep === epClean)
 
-		console.log(epName)
 		return (
-			<div className="min-w-full px-6 py-6 my-1 shadow-md">
-				<div className="flex flex-wrap items-center justify-between w-full mb-2">
+			<div className="min-w-full px-4 pb-6 mb-1 shadow-md">
+				<div className="flex flex-wrap items-center justify-between w-full mb-2 hover:translate-y-1 hover:border-gray-200 hover:border-2">
 					<div className="flex items-center">
-						<div className="mr-2 text-xs text-gray-700 uppercase">{epName.ep}:</div>
-						<div>{epName.title}</div>
+						<div className="pt-1 mr-2 text-xs text-gray-700 uppercase">{epName.ep}</div>
+						<div className="text-sm text-gray-800 md:text-base">{epName.title}</div>
 					</div>
 					<div className="flex items-center font-mono text-right text-gray-600">
 						{suggestion.time}&nbsp;
@@ -61,7 +61,7 @@ const Elastic = () => {
 						)}
 					</div>
 				</div>
-				<p>
+				<div className="py-2 pl-4 mt-4 border-l-2 border-gray-400 md:text-lg">
 					{parts.map((part, index) => {
 						const className = part.highlight ? 'highlight' : null
 
@@ -71,7 +71,7 @@ const Elastic = () => {
 							</span>
 						)
 					})}
-				</p>
+				</div>
 			</div>
 		)
 	}
@@ -120,6 +120,7 @@ const Elastic = () => {
 				renderSuggestion={renderSuggestion}
 				inputProps={inputProps}
 				alwaysRenderSuggestions={true}
+				autoFocus={true}
 			/>
 		</div>
 	)

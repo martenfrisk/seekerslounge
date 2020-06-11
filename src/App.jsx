@@ -12,6 +12,7 @@ const App = () => {
 			<Sidebar />
 
 			<div className="w-full h-auto mt-0 md:w-3/4">
+			<div className="px-8 pt-2 text-sm md:mt-8">Search here:</div>
 				<Elastic />
 			</div>
 		</div>
