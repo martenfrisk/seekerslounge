@@ -1,4 +1,4 @@
-const testFolder = '../transcripts';
+const testFolder = '../transcripts/x';
 const fs = require('fs');
 
 fs.readdirSync(testFolder).forEach(file => {

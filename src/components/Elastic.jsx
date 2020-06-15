@@ -6,6 +6,7 @@ import AutosuggestHighlightMatch from 'autosuggest-highlight/match'
 import AutosuggestHighlightParse from 'autosuggest-highlight/parse'
 import './Search.css'
 import epList from '../assets/episodes.json'
+import { Link } from 'react-router-dom'
 
 const randomQuery = [
 	'guinness',
@@ -53,6 +54,12 @@ const Elastic = () => {
 						<div className="text-sm text-gray-800 md:text-base">{epName.title}</div>
 					</div>
 					<div className="flex items-center font-mono text-right text-gray-600">
+						<div className="mr-2 font-sans text-right text-blue-600 border-b-2 border-dotted">
+							<Link to={{
+								pathname: `/seekerslounge/ep/${epName.ep}`,
+								hash: `#${suggestion.time}`
+								}}>go to transcript</Link>
+						</div>
 						{suggestion.time}&nbsp;
 						{suggestion.edited ? (
 							<span className="text-2xl text-green-400">✔</span>
@@ -79,6 +86,8 @@ const Elastic = () => {
 	const onSuggestionsFetchRequested = ({ value }) => {
 		axios
 			.post('https://search-seekerslounge-bfv6hl5b7dikv4ehjzd3gs4tsu.us-east-1.es.amazonaws.com/teach/_search', {
+				from: 0,
+				size: 99,
 				query: {
 					multi_match: {
 						query: value,

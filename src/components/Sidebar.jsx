@@ -1,7 +1,30 @@
 import React, { useState } from 'react'
 import Pot from '../img/coffee.svg'
 import '../App.css'
-import Episodes from '../assets/episodes.json'
+// import Episodes from '../assets/episodes.json'
+import { eps } from '../assets/episodelist'
+import {
+	Link
+} from "react-router-dom"
+
+const EpList = () => {
+	return (
+		<div>
+			List of episodes:
+			{eps.map(item => {
+				let epName = item.slice(0, -5)
+				return (
+					<div className="flex flex-wrap my-2">
+					<Link to={`/seekerslounge/ep/${epName}`}>
+						<div className="mr-1 text-xs">{epName}</div>
+						</Link>
+						{/* <div className="text-sm"></div> */}
+					</div>)
+			})}
+		</div>
+	)
+	}
+
 
 const Sidebar = () => {
 	const [ infoView, setInfoView ] = useState(true)
@@ -18,9 +41,9 @@ const Sidebar = () => {
 			<div className="flex items-end justify-end h-40 pr-3 mt-0 text-2xl text-gray-800 bg-blue-300">
 				<Coffee />
 				<div className="flex flex-col justify-end">
-					<a href="/" className="text-gray-700">
+					<Link to="/seekerslounge" className="text-gray-700">
 						Seekers&apos; Lounge
-					</a>
+					</Link>
 					<div className="text-xs text-blue-900">a Teachers' Lounge search engine</div>
 				</div>
 			</div>
@@ -193,20 +216,6 @@ const Coffee = () => {
 	)
 }
 
-const EpList = () => {
-return (
-	<div>
-		List of episodes:
-		{Episodes.map(item => {
-			return (
-				<div className="flex flex-wrap my-2">
-					<div className="mr-1 text-xs">{item.ep}</div>
-					<div className="text-sm">{item.title}</div>
-				</div>)
-		})}
-	</div>
-)
-}
 
 const Timeline = () => {
 	return (

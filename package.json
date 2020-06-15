@@ -24,6 +24,7 @@
     "react-highlighter": "^0.4.3",
     "react-instantsearch-dom": "^6.5.0",
     "react-router-dom": "^5.2.0",
+    "react-router-hash-link": "^1.2.2",
     "react-scripts": "3.4.1",
     "require-all": "^3.0.0",
     "searchkit": "^2.4.1-alpha.4",
