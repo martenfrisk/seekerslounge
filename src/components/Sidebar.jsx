@@ -1,24 +1,27 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Pot from '../img/coffee.svg'
 import '../App.css'
 // import Episodes from '../assets/episodes.json'
+import epList from '../assets/episodes.json'
 import { eps } from '../assets/episodelist'
 import {
 	Link
 } from "react-router-dom"
 
 const EpList = () => {
+	
 	return (
 		<div>
 			List of episodes:
 			{eps.map(item => {
 				let epName = item.slice(0, -5)
+				let epTitle = epList.find((x) => x.ep === epName)
 				return (
 					<div className="flex flex-wrap my-2">
-					<Link to={`/seekerslounge/ep/${epName}`}>
-						<div className="mr-1 text-xs">{epName}</div>
+					<Link to={`/ep/${epName}`}>
+						<div className="w-16 mr-1 text-xs text-center bg-blue-100 rounded">{epName}</div>
+						<div className="w-full text-sm">{epTitle.title}</div>
 						</Link>
-						{/* <div className="text-sm"></div> */}
 					</div>)
 			})}
 		</div>
@@ -30,18 +33,26 @@ const Sidebar = () => {
 	const [ infoView, setInfoView ] = useState(true)
 	const [ moreInfo, setMoreInfo ] = useState(false)
 	const [ copyright, setCopyright ] = useState(false)
-	const [ eps, setEps ] = useState(false)
+	const [ eps, setEps ] = useState()
 	const handleInfoView = () => setInfoView((prev) => !prev)
 	const handleMoreInfo = () => setMoreInfo((prev) => !prev)
 	const handleCopyright = () => setCopyright((prev) => !prev)
 	const handleEps = () => setEps((prev) => !prev)
-
+	let width = window.innerWidth;
+	useEffect(() => {
+		
+		if (width > 768) {
+			setEps(() => true)
+		} else {
+			setEps(() => false)
+		}
+	}, [width])
 	return (
 		<div className="w-full py-0 mt-0 md:mb-0 md:w-1/4 md:max-w-sm ">
 			<div className="flex items-end justify-end h-40 pr-3 mt-0 text-2xl text-gray-800 bg-blue-300">
 				<Coffee />
 				<div className="flex flex-col justify-end">
-					<Link to="/seekerslounge" className="text-gray-700">
+					<Link to="/" className="text-gray-700">
 						Seekers&apos; Lounge
 					</Link>
 					<div className="text-xs text-blue-900">a Teachers' Lounge search engine</div>

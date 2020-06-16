@@ -15,10 +15,10 @@ const randomQuery = [
 	'lasagna',
 	'big nightmare',
 	'el chapo',
-	'cheetahman',
+	'cheetah man',
 	'see you in court',
 	'sully',
-	'bottomless piggybank',
+	'bottomless piggy bank',
 	'scarecrow',
 	'south pole santa',
 	'Wimberley',
@@ -38,7 +38,7 @@ const Elastic = () => {
 	let initValue = randomQuery[getRandomInt(randomQuery.length)]
 	const [ value, setValue ] = useState(initValue)
 	const [ suggestions, setSuggestions ] = useState([])
-
+	
 	const renderSuggestion = (suggestion, { query }) => {
 		const suggestionText = suggestion.line
 		const matches = AutosuggestHighlightMatch(suggestionText, query)
@@ -47,7 +47,7 @@ const Elastic = () => {
 		let epName = epList.find((x) => x.ep === epClean)
 
 		return (
-			<div className="min-w-full px-4 pb-6 mb-1 shadow-md">
+			<div className="min-w-full px-4 pb-6 mb-6 shadow-md">
 				<div className="flex flex-wrap items-center justify-between w-full mb-2 hover:translate-y-1 hover:border-gray-200 hover:border-2">
 					<div className="flex items-center">
 						<div className="pt-1 mr-2 text-xs text-gray-700 uppercase">{epName.ep}</div>
@@ -56,7 +56,7 @@ const Elastic = () => {
 					<div className="flex items-center font-mono text-right text-gray-600">
 						<div className="mr-2 font-sans text-right text-blue-600 border-b-2 border-dotted">
 							<Link to={{
-								pathname: `/seekerslounge/ep/${epName.ep}`,
+								pathname: `/ep/${epName.ep}`,
 								hash: `#${suggestion.time}`
 								}}>go to transcript</Link>
 						</div>
@@ -89,11 +89,13 @@ const Elastic = () => {
 				from: 0,
 				size: 99,
 				query: {
-					multi_match: {
-						query: value,
-						fields: [ 'line', 'episode' ],
-						fuzziness: 'AUTO'
-					}
+							multi_match: {
+								query: value,
+								fields: [ 'line', 'episode' ],
+								fuzziness: 'AUTO',
+								// type: 'best_fields',
+								// operator: 'and'
+							}
 				}
 			})
 			.then((res) => {
