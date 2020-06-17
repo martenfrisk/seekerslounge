@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import Pot from '../img/coffee.svg'
 import '../App.css'
-// import Episodes from '../assets/episodes.json'
 import epList from '../assets/episodes.json'
 import { eps } from '../assets/episodelist'
-import {
-	Link
-} from "react-router-dom"
+import { Link } from "react-router-dom"
 
 const EpList = () => {
 	
 	return (
 		<div>
-			List of episodes:
 			{eps.map(item => {
 				let epName = item.slice(0, -5)
 				let epTitle = epList.find((x) => x.ep === epName)
@@ -68,10 +64,10 @@ const Sidebar = () => {
 				{infoView && (
 					<div>
 						<p>
-							Currently includes all episodes (regular and mini) excluding season 9. <br />
+							Now includes ALL episodes!<br />
 							<br />
 							Transcripts are unedited and the speakers have not been correctly identified. Intro has been
-							removed so add 30 seconds for accurate timestamp.
+							removed so add ~30 seconds for accurate timestamp.
 							<br />
 							<br />
 							Uncommon words and names such as "Podd Tadre" may not show up correctly because the results
@@ -266,7 +262,7 @@ const Timeline = () => {
 					<span className="bubble" />
 					8
 				</li>
-				<li>
+				<li className="completed">
 					<span className="bubble" />
 					9
 				</li>
