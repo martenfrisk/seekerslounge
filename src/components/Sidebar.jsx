@@ -1,51 +1,68 @@
 import React, { useState, useEffect } from 'react'
+import { Link, withRouter } from 'react-router-dom'
+
 import Pot from '../img/coffee.svg'
 import '../App.css'
-import epList from '../assets/episodes.json'
-import { eps } from '../assets/episodelist'
-import { Link } from "react-router-dom"
 
-const EpList = () => {
-	
+import epList from '../assets/episodes.json'
+import { eps as episodes } from '../assets/episodelist'
+
+const EpisodeLinks = () => {
 	return (
 		<div>
-			{eps.map(item => {
+			{episodes.map((item) => {
 				let epName = item.slice(0, -5)
 				let epTitle = epList.find((x) => x.ep === epName)
 				return (
-					<div className="flex flex-wrap my-2">
-					<Link to={`/ep/${epName}`}>
-						<div className="w-16 mr-1 text-xs text-center bg-blue-100 rounded">{epName}</div>
-						<div className="w-full text-sm">{epTitle.title}</div>
+					<div className="flex flex-wrap my-2" key={epName}>
+						<Link
+							to={{
+								pathname: `/ep/${epName}`,
+								hash: `#${epName}`
+							}}
+						>
+							<div className="w-16 mr-1 text-xs text-center bg-blue-100 rounded">{epName}</div>
+							<div className="w-full text-sm">{epTitle.title}</div>
 						</Link>
-					</div>)
+					</div>
+				)
 			})}
 		</div>
 	)
-	}
+}
 
-
-const Sidebar = () => {
+const Sidebar = ({ history }) => {
 	const [ infoView, setInfoView ] = useState(true)
 	const [ moreInfo, setMoreInfo ] = useState(false)
 	const [ copyright, setCopyright ] = useState(false)
-	const [ eps, setEps ] = useState()
+	const [ eps, setEps ] = useState(false)
 	const handleInfoView = () => setInfoView((prev) => !prev)
 	const handleMoreInfo = () => setMoreInfo((prev) => !prev)
 	const handleCopyright = () => setCopyright((prev) => !prev)
 	const handleEps = () => setEps((prev) => !prev)
-	let width = window.innerWidth;
-	useEffect(() => {
-		
-		if (width > 768) {
-			setEps(() => true)
-		} else {
-			setEps(() => false)
-		}
-	}, [width])
+	
+	let width = window.innerWidth
+
+	useEffect(
+		() => {
+			if (width > 768) {
+				setEps(() => true)
+			} else {
+				setEps(() => false)
+			}
+		},
+		[ width ]
+	)
+	useEffect(
+		() =>
+			history.listen(() => {
+				setEps(() => false)
+			}),
+		[ history ]
+	)
 	return (
-		<div className="w-full py-0 mt-0 md:mb-0 md:w-1/4 md:max-w-sm ">
-			<div className="flex items-end justify-end h-40 pr-3 mt-0 text-2xl text-gray-800 bg-blue-300">
+		<div className="sticky w-full py-0 mt-0 md:mb-0 md:w-1/4 md:max-w-sm ">
+			<div className="flex items-end justify-end h-16 pr-3 mt-0 text-2xl text-gray-800 bg-blue-300 md:h-40">
 				<Coffee />
 				<div className="flex flex-col justify-end">
 					<Link to="/" className="text-gray-700">
@@ -66,12 +83,9 @@ const Sidebar = () => {
 						<p>
 							Now includes ALL episodes!<br />
 							<br />
-							Transcripts are unedited and the speakers have not been correctly identified. Intro has been
-							removed so add ~30 seconds for accurate timestamp.
-							<br />
-							<br />
-							Uncommon words and names such as "Podd Tadre" may not show up correctly because the results
-							have been automatically transcribed.
+							Transcripts are unedited. Speakers not identified. Intro has been removed so add ~30 seconds
+							for accurate timestamp. Uncommon phrases (e.g. "Podd Tadre") may not show up. Try searching
+							phonetically.
 						</p>
 						<Timeline />
 
@@ -117,12 +131,12 @@ const Sidebar = () => {
 							</div>
 						)}
 
-						<div onClick={handleEps} className="inline-block border-b border-dotted cursor-pointer">
-							Episode list&nbsp;&#9662;
+						<div className="sticky">
+							<div onClick={handleEps} className="inline-block border-b border-dotted cursor-pointer">
+								Episode list&nbsp;&#9662;
+							</div>
+							{eps && <EpisodeLinks />}
 						</div>
-						{eps && (
-							<EpList />
-						)}
 					</div>
 				)}
 			</div>
@@ -223,55 +237,10 @@ const Coffee = () => {
 	)
 }
 
-
 const Timeline = () => {
 	return (
 		<div>
-			<p className="mt-4 text-sm">Progress (by season): </p>
-			<p className="w-full mb-2 text-xs text-center">transcription</p>
-			<ul className="progress-indicator">
-				<li className="completed">
-					<span className="bubble" />
-					1
-				</li>
-				<li className="completed">
-					<span className="bubble" />
-					2
-				</li>
-				<li className="completed">
-					<span className="bubble" />
-					3
-				</li>
-				<li className="completed">
-					<span className="bubble" />
-					4
-				</li>
-				<li className="completed">
-					<span className="bubble" />
-					5
-				</li>
-				<li className="completed">
-					<span className="bubble" />
-					6
-				</li>
-				<li className="completed">
-					<span className="bubble" />
-					7
-				</li>
-				<li className="completed">
-					<span className="bubble" />
-					8
-				</li>
-				<li className="completed">
-					<span className="bubble" />
-					9
-				</li>
-				<li className="completed">
-					<span className="bubble" />
-					minis
-				</li>
-			</ul>
-			<p className="w-full mb-2 text-xs text-center">editing</p>
+			<p className="my-4 text-sm">Editing progress (by season): </p>
 			<ul className="mb-4 progress-indicator">
 				<li>
 					<span className="bubble" />
@@ -317,4 +286,4 @@ const Timeline = () => {
 		</div>
 	)
 }
-export default Sidebar
+export default withRouter(Sidebar)

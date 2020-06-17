@@ -1,6 +1,7 @@
 import React from 'react'
 import { HashLink as Link } from 'react-router-hash-link'
 import epList from '../assets/episodes.json'
+import ScrollToTop from '../utils/ScrollToTop'
 
 const Episode = (props) => {
 	const ep = require('../transcripts/' + props.props)
@@ -9,7 +10,8 @@ const Episode = (props) => {
 
 	return (
 		<div>
-    <div className="mx-6 my-4 text-2xl">
+		<ScrollToTop />
+    <div className="mx-6 my-4 text-2xl" id={`${epName}`}>
     {epName} - {epTitle.title}<br />
 		<div className="text-base">{epTitle.desc}</div>
     </div>

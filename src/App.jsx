@@ -17,6 +17,8 @@ const App = () => {
 	useEffect(() => {
 		toast.info('Search optimization in progress. Getting no results? Try adding spaces, e.g. cheetahman -> cheetah man')
 	}, [])
+
+	
 	return (
 		<Switch>
 			
