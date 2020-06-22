@@ -4,43 +4,37 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@appbaseio/reactivesearch": "^3.10.1",
+    "@loadable/component": "^5.12.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "algoliasearch": "^4.2.0",
     "autosuggest-highlight": "^3.1.1",
-    "aws-sdk": "^2.686.0",
     "axios": "^0.19.2",
+    "depcheck": "^0.9.2",
     "fs": "^0.0.1-security",
-    "fuse.js": "^6.0.0",
-    "json-concat": "^0.0.1",
-    "path": "^0.12.7",
     "prop-types": "^15.7.2",
     "qs": "^6.9.4",
     "react": "^16.13.1",
     "react-autosuggest": "^10.0.2",
     "react-dom": "^16.13.1",
-    "react-highlighter": "^0.4.3",
     "react-instantsearch-dom": "^6.5.0",
     "react-router-dom": "^5.2.0",
     "react-router-hash-link": "^1.2.2",
-    "react-scripts": "3.4.1",
-    "react-toastify": "^6.0.5",
-    "require-all": "^3.0.0",
-    "searchkit": "^2.4.1-alpha.4",
-    "tailwindcss": "^1.4.6",
-    "throttle-debounce": "^2.2.1"
+    "react-scripts": "^3.4.1",
+    "source-map-explorer": "^2.4.2",
+    "tailwindcss": "^1.4.6"
   },
   "scripts": {
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "predeploy": "yarn run build",
     "deploy": "gh-pages -d build",
-    "start": "yarn run watch:css && react-scripts start",
+    "start": "yarn run build:css && react-scripts start",
     "build": "yarn run build:css && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build:css": "postcss src/assets/tailwind.css -o src/assets/main.css",
-    "watch:css": "postcss src/assets/tailwind.css -o src/assets/main.css"
+    "build:css": "yarn tailwind build src/assets/tailwind.css -o src/assets/main.css",
+    "watch:css": "yarn tailwind build src/assets/tailwind.css -o src/assets/main.css"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -58,8 +52,11 @@
     ]
   },
   "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^2.3.0",
     "autoprefixer": "^9.8.0",
     "gh-pages": "^2.2.0",
-    "postcss-cli": "^7.1.1"
+    "postcss-cli": "^7.1.1",
+    "webpack-bundle-analyzer": "^3.8.0",
+    "webpack-cli": "^3.3.12"
   }
 }

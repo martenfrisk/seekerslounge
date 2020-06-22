@@ -81,13 +81,14 @@ const Sidebar = ({ history }) => {
 				{infoView && (
 					<div>
 						<p>
-							Now includes ALL episodes!<br />
-							<br />
-							Transcripts are unedited. Speakers not identified. Intro has been removed so add ~30 seconds
-							for accurate timestamp. Uncommon phrases (e.g. "Podd Tadre") may not show up. Try searching
-							phonetically.
+							<p className="my-4">Now includes ALL episodes!</p>
+							<p className="my-4">Getting no results? Try adding spaces, e.g. cheetahman -{">"} cheetah man</p>
+							<p className="my-4">
+								Transcripts are unedited. Speakers not identified. Intro has been removed so add ~30 seconds
+								for accurate timestamp. Uncommon phrases (e.g. "Podd Tadre") may not show up. Try searching
+								phonetically.
+							</p>
 						</p>
-						<Timeline />
 
 						<div>
 							Want to help out? Click{' '}
@@ -237,53 +238,4 @@ const Coffee = () => {
 	)
 }
 
-const Timeline = () => {
-	return (
-		<div>
-			<p className="my-4 text-sm">Editing progress (by season): </p>
-			<ul className="mb-4 progress-indicator">
-				<li>
-					<span className="bubble" />
-					1
-				</li>
-				<li>
-					<span className="bubble" />
-					2
-				</li>
-				<li>
-					<span className="bubble" />
-					3
-				</li>
-				<li>
-					<span className="bubble" />
-					4
-				</li>
-				<li>
-					<span className="bubble" />
-					5
-				</li>
-				<li>
-					<span className="bubble" />
-					6
-				</li>
-				<li>
-					<span className="bubble" />
-					7
-				</li>
-				<li>
-					<span className="bubble" />
-					8
-				</li>
-				<li>
-					<span className="bubble" />
-					9
-				</li>
-				<li>
-					<span className="bubble" />
-					minis
-				</li>
-			</ul>
-		</div>
-	)
-}
 export default withRouter(Sidebar)
