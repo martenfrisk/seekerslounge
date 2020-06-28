@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useReducer } from 'react'
 import Autosuggest from 'react-autosuggest'
 import axios from 'axios'
 // import { debounce } from 'throttle-debounce'
@@ -38,7 +38,9 @@ const Elastic = () => {
 	let initValue = randomQuery[getRandomInt(randomQuery.length)]
 	const [ value, setValue ] = useState(initValue)
 	const [ suggestions, setSuggestions ] = useState([])
-	
+	const [ exact, setExact ] = useState(false)
+	const [ showExactInfo, setShowExactInfo ] = useState(false)
+
 	const renderSuggestion = (suggestion, { query }) => {
 		const suggestionText = suggestion.line
 		const matches = AutosuggestHighlightMatch(suggestionText, query)
@@ -55,10 +57,14 @@ const Elastic = () => {
 					</div>
 					<div className="flex items-center font-mono text-right text-gray-600">
 						<div className="mr-2 font-sans text-right text-blue-600 border-b-2 border-dotted">
-							<Link to={{
-								pathname: `/ep/${epName.ep}`,
-								hash: `#${suggestion.time}`
-								}}>go to transcript</Link>
+							<Link
+								to={{
+									pathname: `/ep/${epName.ep}`,
+									hash: `#${suggestion.time}`
+								}}
+							>
+								go to transcript
+							</Link>
 						</div>
 						{suggestion.time}&nbsp;
 						{suggestion.edited ? (
@@ -83,19 +89,39 @@ const Elastic = () => {
 		)
 	}
 
-	const onSuggestionsFetchRequested = ({ value }) => {
+	const onSuggestionFetchFuzzy = ({ value }) => {
 		axios
 			.post('https://search-seekerslounge-bfv6hl5b7dikv4ehjzd3gs4tsu.us-east-1.es.amazonaws.com/teach/_search', {
 				from: 0,
 				size: 99,
 				query: {
-							multi_match: {
-								query: value,
-								fields: [ 'line', 'episode' ],
-								fuzziness: 'AUTO',
-								// type: 'best_fields',
-								// operator: 'and'
-							}
+					multi_match: {
+						query: value,
+						fields: [ 'line', 'episode' ],
+						fuzziness: 'AUTO'
+						// type: 'phrase',
+						// operator: 'and'
+					}
+				}
+			})
+			.then((res) => {
+				const results = res.data.hits.hits.map((h) => h._source)
+				setSuggestions(() => results)
+			})
+	}
+	const onSuggestionFetchExact = ({ value }) => {
+		axios
+			.post('https://search-seekerslounge-bfv6hl5b7dikv4ehjzd3gs4tsu.us-east-1.es.amazonaws.com/teach/_search', {
+				from: 0,
+				size: 99,
+				query: {
+					multi_match: {
+						query: value,
+						fields: [ 'line', 'episode' ],
+						// fuzziness: 'AUTO',
+						type: 'phrase',
+						operator: 'and'
+					}
 				}
 			})
 			.then((res) => {
@@ -120,12 +146,42 @@ const Elastic = () => {
 			setValue(newValue)
 		}
 	}
+	// const textInput = useRef(null);
+
+	// useEffect(() => {
+
+	// 	setShowExactInfo(() => false)
+	// }, [exact])
+
+	const [ , forceUpdate ] = useReducer((x) => x + 1, 0)
+
+	const handleCheckbox = () => {
+		setExact((prev) => !prev)
+		forceUpdate()
+		setShowExactInfo(() => true)
+		setTimeout(() => {
+			setShowExactInfo(() => false)
+		}, 2000)
+	}
 
 	return (
 		<div>
+			<div className="flex items-center px-8 md:mt-8">
+				<label className="mr-1 text-sm" for="check">
+					Search exact matches:{' '}
+				</label>
+				<input id="check" type="checkbox" onClick={handleCheckbox} checked={exact} />
+				{showExactInfo && <div className="text-sm">&nbsp;&nbsp;Click the search bar</div>}
+			</div>
+			<div className="flex w-full px-8 mb-2 text-sm">
+				{suggestions && <p>{suggestions.length} results for&nbsp;</p>}
+				{value && <p>'{value}'&nbsp;</p>}
+				{exact ? <p>(exact search)</p> : <p>(fuzzy search)</p>}
+			</div>
+
 			<Autosuggest
 				suggestions={suggestions}
-				onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+				onSuggestionsFetchRequested={exact ? onSuggestionFetchExact : onSuggestionFetchFuzzy}
 				onSuggestionsClearRequested={onSuggestionsClearRequested}
 				getSuggestionValue={getSuggestionValue}
 				renderSuggestion={renderSuggestion}

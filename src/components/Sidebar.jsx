@@ -49,6 +49,7 @@ const Sidebar = ({ history }) => {
 				setEps(() => true)
 			} else {
 				setEps(() => false)
+				setInfoView(() => false)
 			}
 		},
 		[ width ]
