@@ -111,7 +111,7 @@ const Elastic = (props) => {
 		axios
 			.post('https://search-seekerslounge-bfv6hl5b7dikv4ehjzd3gs4tsu.us-east-1.es.amazonaws.com/teach/_search', {
 				from: 0,
-				size: 99,
+				size: 199,
 				query: {
 					multi_match: {
 						query: value,
@@ -129,7 +129,7 @@ const Elastic = (props) => {
 		axios
 			.post('https://search-seekerslounge-bfv6hl5b7dikv4ehjzd3gs4tsu.us-east-1.es.amazonaws.com/teach/_search', {
 				from: 0,
-				size: 99,
+				size: 199,
 				query: {
 					multi_match: {
 						query: value,
@@ -150,7 +150,7 @@ const Elastic = (props) => {
 	}
 
 	const getSuggestionValue = (suggestion) => {
-		return suggestion.line
+		return value
 	}
 
 	const inputProps = {
@@ -203,6 +203,7 @@ const Elastic = (props) => {
 				getSuggestionValue={getSuggestionValue}
 				renderSuggestion={renderSuggestion}
 				inputProps={inputProps}
+				focusInputOnSuggestionClick={false}
 				alwaysRenderSuggestions={true}
 				autoFocus={true}
 			/>
