@@ -188,7 +188,7 @@ const Elastic = (props) => {
 					Search exact matches:{' '}
 				</label>
 				<input id="check" type="checkbox" onClick={handleCheckbox} checked={exact} />
-				{showExactInfo && <div className="text-sm">&nbsp;&nbsp;Click the search bar</div>}
+				{showExactInfo && <div className="px-2 mx-2 text-sm text-white bg-red-700 rounded">Click the search bar</div>}
 			</div>
 			<div className="flex w-full px-8 mb-2 text-sm">
 				{suggestions && <p>{suggestions.length} results for&nbsp;</p>}

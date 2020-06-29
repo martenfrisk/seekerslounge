@@ -635,6 +635,12 @@ video {
   background-color: rgba(247, 250, 252, var(--bg-opacity));
 }
 
+.bg-red-700 {
+  --bg-opacity: 1;
+  background-color: #c53030;
+  background-color: rgba(197, 48, 48, var(--bg-opacity));
+}
+
 .bg-blue-100 {
   --bg-opacity: 1;
   background-color: #ebf8ff;
@@ -784,6 +790,11 @@ video {
 .my-2 {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+}
+
+.mx-2 {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
 }
 
 .my-4 {
