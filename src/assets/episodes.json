@@ -312,6 +312,18 @@
     "date": "Wed, 10 Jun 2020 21:00:00 -0700"
   },
   {
+    "ep": "mini-53",
+    "title": "Book Fair Ad",
+    "desc": "The teachers cut an ad promoting the Hamilton Book Fair.",
+    "date": "Wed, 17 Jun 2020 21:00:00 -0700"
+  },
+  {
+    "ep": "mini-54",
+    "title": "Homework",
+    "desc": "Howard assigns his kids homework before they leave class for the day.",
+    "date": "Wed, 24 Jun 2020 21:00:00 -0700"
+  },
+  {
     "ep": "s01e01",
     "title": "They're Pine, Nuts with Klaus Kendall (Paul F. Tompkins)",
     "desc": "In the pilot episode of Hamilton High School's first, best, and only podcast hosted by teachers tackling issues about the Hamilton community, Mr. Cravy, Mr. Levi's, Mr. Padre, and Mr. Weatherman discuss some pet peeves, the perils of boogie boarding, and Mr. Levi's announces his mayoral campaign. Then, shop teacher Klaus Kendall (Paul F. Tompkins) comes by to share his deep respect for wood and hatred of animal.",
@@ -886,5 +898,11 @@
     "title": "This Here Wagon",
     "desc": "Superintendent Charles Minipig (Paul F. Tompkins) joins the teachers to help them plan Hamilton’s graduation ceremony, including taste-testing the appetizers they plan to serve.",
     "date": "Tue, 16 Jun 2020 21:00:00 -0700"
+  },
+  {
+    "ep": "s09e39",
+    "title": "The Book Of Hairman",
+    "desc": "The teachers (and Mike Ehrmentraut) recap Hamilton's graduation ceremony, including their wardrobe malfunctions and hot mic moments, and finally say goodbye to the podcast. ",
+    "date": "Wed, 24 Jun 2020 00:00:09 -0700"
   }
  ]
