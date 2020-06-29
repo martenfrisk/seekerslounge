@@ -647,6 +647,12 @@ video {
   background-color: rgba(144, 205, 244, var(--bg-opacity));
 }
 
+.bg-blue-700 {
+  --bg-opacity: 1;
+  background-color: #2b6cb0;
+  background-color: rgba(43, 108, 176, var(--bg-opacity));
+}
+
 .border-gray-300 {
   --border-opacity: 1;
   border-color: #e2e8f0;
@@ -836,6 +842,11 @@ video {
   padding-bottom: 0.5rem;
 }
 
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
 .py-4 {
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -894,6 +905,12 @@ video {
 
 .text-justify {
   text-align: justify;
+}
+
+.text-white {
+  --text-opacity: 1;
+  color: #fff;
+  color: rgba(255, 255, 255, var(--text-opacity));
 }
 
 .text-gray-400 {

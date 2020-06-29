@@ -149,5 +149,6 @@ export const eps = [
 "s09e36.json",
 "s09e37.json",
 "s09e38.json",
-"s09e39.json"
+"s09e39.json",
+"Peecast.json"
 ]

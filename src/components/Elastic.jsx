@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react'
+import React, { useState, useReducer, useEffect } from 'react'
 import Autosuggest from 'react-autosuggest'
 import axios from 'axios'
 // import { debounce } from 'throttle-debounce'
@@ -6,7 +6,8 @@ import AutosuggestHighlightMatch from 'autosuggest-highlight/match'
 import AutosuggestHighlightParse from 'autosuggest-highlight/parse'
 import './Search.css'
 import epList from '../assets/episodes.json'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
+import qs from 'qs'
 
 const randomQuery = [
 	'guinness',
@@ -34,12 +35,29 @@ function getRandomInt(max) {
 	return Math.floor(Math.random() * Math.floor(max))
 }
 
-const Elastic = () => {
+// function useQuery() {
+//   return new URLSearchParams(useLocation().search);
+// }
+
+const Elastic = (props) => {
 	let initValue = randomQuery[getRandomInt(randomQuery.length)]
-	const [ value, setValue ] = useState(initValue)
+	const { history } = props
+	const [ value, setValue ] = useState(
+		history.location.search ? qs.parse(history.location.search)['?search'] : initValue
+	)
 	const [ suggestions, setSuggestions ] = useState([])
 	const [ exact, setExact ] = useState(false)
 	const [ showExactInfo, setShowExactInfo ] = useState(false)
+	const [ , forceUpdate ] = useReducer((x) => x + 1, 0)
+	useEffect(() => {
+		history.push({
+			search: "?" + new URLSearchParams({search: value})
+		})
+	}, [value, history])
+	useEffect(() => {
+		setValue(qs.parse(history.location.search)['?search'])
+		forceUpdate()
+	}, [history])
 
 	const renderSuggestion = (suggestion, { query }) => {
 		const suggestionText = suggestion.line
@@ -99,8 +117,6 @@ const Elastic = () => {
 						query: value,
 						fields: [ 'line', 'episode' ],
 						fuzziness: 'AUTO'
-						// type: 'phrase',
-						// operator: 'and'
 					}
 				}
 			})
@@ -118,7 +134,6 @@ const Elastic = () => {
 					multi_match: {
 						query: value,
 						fields: [ 'line', 'episode' ],
-						// fuzziness: 'AUTO',
 						type: 'phrase',
 						operator: 'and'
 					}
@@ -146,14 +161,7 @@ const Elastic = () => {
 			setValue(newValue)
 		}
 	}
-	// const textInput = useRef(null);
 
-	// useEffect(() => {
-
-	// 	setShowExactInfo(() => false)
-	// }, [exact])
-
-	const [ , forceUpdate ] = useReducer((x) => x + 1, 0)
 
 	const handleCheckbox = () => {
 		setExact((prev) => !prev)
@@ -164,9 +172,18 @@ const Elastic = () => {
 		}, 2000)
 	}
 
+	const handleRandom = () => {
+		setValue(() => randomQuery[getRandomInt(randomQuery.length)])
+		setShowExactInfo(() => true)
+		setTimeout(() => {
+			setShowExactInfo(() => false)
+		}, 2000)
+	}
+
 	return (
 		<div>
 			<div className="flex items-center px-8 md:mt-8">
+			<button className="px-2 mr-2 text-sm text-white bg-blue-700 rounded" onClick={handleRandom}>Get random query</button>
 				<label className="mr-1 text-sm" for="check">
 					Search exact matches:{' '}
 				</label>
@@ -193,4 +210,4 @@ const Elastic = () => {
 	)
 }
 
-export default Elastic
+export default withRouter(Elastic)
