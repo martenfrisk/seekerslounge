@@ -1,6 +1,7 @@
 import React, { useState, useReducer, useEffect } from 'react'
 import Autosuggest from 'react-autosuggest'
 import axios from 'axios'
+import LazyLoad from 'react-lazyload'
 // import { debounce } from 'throttle-debounce'
 import AutosuggestHighlightMatch from 'autosuggest-highlight/match'
 import AutosuggestHighlightParse from 'autosuggest-highlight/parse'
@@ -18,7 +19,7 @@ const randomQuery = [
 	'el chapo',
 	'cheetah man',
 	'see you in court',
-	'sully',
+	'beef diaper',
 	'bottomless piggy bank',
 	'scarecrow',
 	'south pole santa',
@@ -29,7 +30,9 @@ const randomQuery = [
 	'bethany hart',
 	'morrissey',
 	'goths',
-	'famously'
+	'famously',
+	'oj simpson',
+	'let\'s just say'
 ]
 function getRandomInt(max) {
 	return Math.floor(Math.random() * Math.floor(max))
@@ -41,42 +44,67 @@ function getRandomInt(max) {
 
 const Elastic = (props) => {
 	let initValue = randomQuery[getRandomInt(randomQuery.length)]
-	const { history, location } = props
+	const { history } = props
 	const [ value, setValue ] = useState(
 		history.location.search ? qs.parse(history.location.search)['?q'] : initValue
 	)
 	const [ suggestions, setSuggestions ] = useState([])
 	const [ exact, setExact ] = useState(false)
 	const [ showExactInfo, setShowExactInfo ] = useState(false)
-	const [ filterSeason, setFilterSeason ] = useState(['all'])
+	const [ filterSeason, setFilterSeason ] = useState(
+		qs.parse(history.location.search)['s'] !== undefined ? 
+		qs.parse(history.location.search)['s'].split(',') : ['all']
+	)
+	// console.log(filterSeason)
+	// 	qs.parse(history.location.search)['?s'] ? qs.parse(history.location.search)['s'] : ['all']
+	// )
 	const [ , forceUpdate ] = useReducer((x) => x + 1, 0)
 
 	useEffect(
 		() => {
-			history.push({
-				hash: filterSeason.toString(),
-				search: '?' + new URLSearchParams({ q: value})
+			// console.log(history.location)
+			setValue(qs.parse(history.location.search)['?q'])
+			// console.log(qs.parse(history.location.search))
+			setFilterSeason(
+				qs.parse(history.location.search)['s'] !== undefined ? 
+				qs.parse(history.location.search)['s'].split(',') : ['all'])
+			// let seasons = history.location.pathname
+			// seasons.slice(1).split(',').forEach((seas) => {
+			// 	if (seas !== 'all') {
+			// 		handleSeasonFilter(seas)
+			// 	}
+			// })
+			// forceUpdate()
+		},
+		[ history ]
+	)
+	useEffect(
+		() => {
+			let seasons = filterSeason.join(',')
+			history.replace({
+				// hash: filterSeason.toString(),
+				search: '?' + new URLSearchParams({ 
+					q: value, 
+				}) + '&s=' + seasons
 			})
 		},
 		[ value, history, filterSeason ]
 	)
-
+	
+	const toggleAll = () => {
+		setFilterSeason(['all'])
+	}
+	
 	const handleSeasonFilter = (season) => {
 		if (filterSeason.includes('all')) {
 			setFilterSeason(() => [season])
 		} else if (!filterSeason.includes(season)) {
 			setFilterSeason(filterSeason => [...filterSeason, season])
 		} else {
-			setFilterSeason(filterSeason => filterSeason.filter(p => p !== season))
+			setFilterSeason(filterSeason => filterSeason.filter(p => p !== season))	
 		}
-		console.log(season)
-		console.log(history.location.hash)
-
 	}
 
-	const toggleAll = () => {
-		setFilterSeason(['all'])
-	}
 
 	// useEffect(
 	// 	() => {
@@ -86,25 +114,12 @@ const Elastic = (props) => {
 	// 	[ history ]
 	// )
 
-	useEffect(
-		() => {
-			// console.log(history.location)
-			setValue(qs.parse(history.location.search)['?q'])
-			console.log(history.location.hash)
-			setFilterSeason(() => location.hash.slice(1).split(','))
-			// let seasons = history.location.pathname
-			// seasons.slice(1).split(',').forEach((seas) => {
-			// 	if (seas !== 'all') {
-			// 		handleSeasonFilter(seas)
-			// 	}
-			// })
-			forceUpdate()
-		},
-		[ history, location ]
-	)
 
 	const sortSuggestions = (suggestions) => {
 		if (filterSeason.includes('all')) {
+			return suggestions
+		} else if (filterSeason.length === 0) {
+			toggleAll()
 			return suggestions
 		} else {
 			let filteredSuggestions = []
@@ -126,6 +141,7 @@ const Elastic = (props) => {
 		let epName = epList.find((x) => x.ep === epClean)
 
 		return (
+			<LazyLoad>
 			<div className="min-w-full px-4 pb-6 mb-6 shadow-md">
 				<div className="flex flex-wrap items-center justify-between w-full mb-2 hover:translate-y-1 hover:border-gray-200 hover:border-2">
 					<div className="flex items-center">
@@ -163,6 +179,7 @@ const Elastic = (props) => {
 					})}
 				</div>
 			</div>
+			</LazyLoad>
 		)
 	}
 
@@ -170,7 +187,7 @@ const Elastic = (props) => {
 		axios
 			.post('https://search-seekerslounge-bfv6hl5b7dikv4ehjzd3gs4tsu.us-east-1.es.amazonaws.com/teach/_search', {
 				from: 0,
-				size: 199,
+				size: 499,
 				query: {
 					multi_match: {
 						query: value,
@@ -188,7 +205,7 @@ const Elastic = (props) => {
 		axios
 			.post('https://search-seekerslounge-bfv6hl5b7dikv4ehjzd3gs4tsu.us-east-1.es.amazonaws.com/teach/_search', {
 				from: 0,
-				size: 199,
+				size: 499,
 				query: {
 					multi_match: {
 						query: value,
@@ -240,6 +257,7 @@ const Elastic = (props) => {
 
 	let seasonArr = [ 's01', 's02', 's03', 's04', 's05', 's06', 's07', 's08', 's09', 'min' ]
 
+	
 	return (
 		<div>
 			<div className="flex items-center px-8 md:mt-8">
@@ -258,9 +276,10 @@ const Elastic = (props) => {
 				{suggestions && <p>{sortSuggestions(suggestions).length} results for&nbsp;</p>}
 				{value && <p>'{value}'&nbsp;</p>}
 				{exact ? <p>(exact search)</p> : <p>(fuzzy search)</p>}
-				{filterSeason.includes('all') ? <p>&nbsp;all seasons</p> : <p>&nbsp;in {JSON.stringify(filterSeason)}</p>}
+				{filterSeason.includes('all') ? <p>&nbsp;all seasons</p> : <p>&nbsp;in {filterSeason.join(', ')}</p>}
 			</div>
 			<div className="px-8">
+			{/* {JSON.stringify(filterSeason)} */}
 				Filter by season:&nbsp;
 				{filterSeason.includes('all') ? (
 					<button className="px-1 mr-2 bg-blue-300 rounded-sm" onClick={() => toggleAll()}>
