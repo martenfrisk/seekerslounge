@@ -41,86 +41,82 @@ function getRandomInt(max) {
 
 const Elastic = (props) => {
 	let initValue = randomQuery[getRandomInt(randomQuery.length)]
-	const { history } = props
+	const { history, location } = props
 	const [ value, setValue ] = useState(
-		history.location.search ? qs.parse(history.location.search)['?search'] : initValue
+		history.location.search ? qs.parse(history.location.search)['?q'] : initValue
 	)
 	const [ suggestions, setSuggestions ] = useState([])
 	const [ exact, setExact ] = useState(false)
 	const [ showExactInfo, setShowExactInfo ] = useState(false)
-	const [ filterSeason, setFilterSeason ] = useState({
-		all: true,
-		s01: false,
-		s02: false,
-		s03: false,
-		s04: false,
-		s05: false,
-		s06: false,
-		s07: false,
-		s08: false,
-		s09: false,
-		min: false
-	})
+	const [ filterSeason, setFilterSeason ] = useState(['all'])
 	const [ , forceUpdate ] = useReducer((x) => x + 1, 0)
-	useEffect(() => {
-		history.push({
-			search: "?" + new URLSearchParams({search: value})
-		})
-	}, [value, history])
-	useEffect(() => {
-		setValue(qs.parse(history.location.search)['?search'])
-		forceUpdate()
-	}, [history])
+
+	useEffect(
+		() => {
+			history.push({
+				hash: filterSeason.toString(),
+				search: '?' + new URLSearchParams({ q: value})
+			})
+		},
+		[ value, history, filterSeason ]
+	)
 
 	const handleSeasonFilter = (season) => {
-		setFilterSeason(prev => ({...prev, all: false }))
-		setFilterSeason(prev =>  ({...prev, [season]: !prev[season]}))
+		if (filterSeason.includes('all')) {
+			setFilterSeason(() => [season])
+		} else if (!filterSeason.includes(season)) {
+			setFilterSeason(filterSeason => [...filterSeason, season])
+		} else {
+			setFilterSeason(filterSeason => filterSeason.filter(p => p !== season))
+		}
 		console.log(season)
+		console.log(history.location.hash)
+
 	}
 
 	const toggleAll = () => {
-		setFilterSeason({
-					all: true,
-					s01: false,
-					s02: false,
-					s03: false,
-					s04: false,
-					s05: false,
-					s06: false,
-					s07: false,
-					s08: false,
-					s09: false,
-					min: false
-			})
-		}
+		setFilterSeason(['all'])
+	}
+
+	// useEffect(
+	// 	() => {
+			
+	// 		forceUpdate()
+	// 	},
+	// 	[ history ]
+	// )
+
+	useEffect(
+		() => {
+			// console.log(history.location)
+			setValue(qs.parse(history.location.search)['?q'])
+			console.log(history.location.hash)
+			setFilterSeason(() => location.hash.slice(1).split(','))
+			// let seasons = history.location.pathname
+			// seasons.slice(1).split(',').forEach((seas) => {
+			// 	if (seas !== 'all') {
+			// 		handleSeasonFilter(seas)
+			// 	}
+			// })
+			forceUpdate()
+		},
+		[ history, location ]
+	)
 
 	const sortSuggestions = (suggestions) => {
-		let activeSeasons = []
-		if (filterSeason.all) {
+		if (filterSeason.includes('all')) {
 			return suggestions
 		} else {
-			for (const [key, value] of Object.entries(filterSeason)) {
-				value === true && activeSeasons.push(key)
-			}
 			let filteredSuggestions = []
 			suggestions.forEach((ep) => {
-				let epSeason = ep.episode.slice(0,3)
-				if (activeSeasons.includes(epSeason)) {
+				let epSeason = ep.episode.slice(0, 3)
+				if (filterSeason.includes(epSeason)) {
 					filteredSuggestions.push(ep)
 				}
 			})
 			return filteredSuggestions
 		}
 	}
-
-	const currSeasons = () => {
-		let activeSeasons = []
-		for (const [key, value] of Object.entries(filterSeason)) {
-			value === true && activeSeasons.push(key)
-		}
-		return activeSeasons.join(', ')
-	}
-
 
 	const renderSuggestion = (suggestion, { query }) => {
 		const suggestionText = suggestion.line
@@ -151,7 +147,7 @@ const Elastic = (props) => {
 						{suggestion.edited ? (
 							<span className="text-2xl text-green-400">✔</span>
 						) : (
-							<span className="text-2xl text-gray-400"> &minus;</span>
+							<span className="text-2xl text-gray-400">&minus;</span>
 						)}
 					</div>
 				</div>
@@ -225,7 +221,6 @@ const Elastic = (props) => {
 		}
 	}
 
-
 	const handleCheckbox = () => {
 		setExact((prev) => !prev)
 		forceUpdate()
@@ -243,35 +238,58 @@ const Elastic = (props) => {
 		}, 2000)
 	}
 
-	let seasonArr = ['s01', 's02', 's03', 's04', 's05', 's06', 's07', 's08', 's09', 'min']
+	let seasonArr = [ 's01', 's02', 's03', 's04', 's05', 's06', 's07', 's08', 's09', 'min' ]
 
 	return (
 		<div>
 			<div className="flex items-center px-8 md:mt-8">
-			<button className="px-2 mr-2 text-sm text-white bg-blue-700 rounded" onClick={handleRandom}>Get random query</button>
+				<button className="px-2 mr-2 text-sm text-white bg-blue-700 rounded" onClick={handleRandom}>
+					Get random query
+				</button>
 				<label className="mr-1 text-sm" htmlFor="check">
 					Search exact matches:{' '}
 				</label>
 				<input id="check" type="checkbox" onChange={handleCheckbox} checked={exact} />
-				{showExactInfo && <div className="px-2 mx-2 text-sm text-white bg-red-700 rounded">Click the search bar</div>}
+				{showExactInfo && (
+					<div className="px-2 mx-2 text-sm text-white bg-red-700 rounded">Click the search bar</div>
+				)}
 			</div>
-			<div className="flex w-full px-8 mb-2 text-sm">
-				{suggestions && <p>{suggestions.length} results for&nbsp;</p>}
+			<div className="flex w-full px-8 mt-2 mb-2 text-sm">
+				{suggestions && <p>{sortSuggestions(suggestions).length} results for&nbsp;</p>}
 				{value && <p>'{value}'&nbsp;</p>}
 				{exact ? <p>(exact search)</p> : <p>(fuzzy search)</p>}
-				{filterSeason.all ? <p>&nbsp;all seasons</p> : <p>&nbsp;in {currSeasons()}</p>}
+				{filterSeason.includes('all') ? <p>&nbsp;all seasons</p> : <p>&nbsp;in {JSON.stringify(filterSeason)}</p>}
 			</div>
-			<div className="ml-2">
-			Filter by season:&nbsp;
-			{filterSeason['all'] ? <button className="px-1 mr-2 bg-blue-300 rounded-sm" onClick={() => toggleAll()}>all</button> : <button className="px-1 mr-2" onClick={() => toggleAll()}>all</button>}
-			{seasonArr.map((season) => { 
-				if (filterSeason[season] === true) {
-					return <button className="px-1 mr-2 bg-blue-300 rounded-sm" onClick={() => handleSeasonFilter(season)}>{season}</button>
-				} else if (filterSeason[season] === false) {
-					return <button className="px-1 mr-2" onClick={() => handleSeasonFilter(season)}>{season}</button>
-				}
-				})
-			}
+			<div className="px-8">
+				Filter by season:&nbsp;
+				{filterSeason.includes('all') ? (
+					<button className="px-1 mr-2 bg-blue-300 rounded-sm" onClick={() => toggleAll()}>
+						all
+					</button>
+				) : (
+					<button className="px-1 mr-2" onClick={() => toggleAll()}>
+						all
+					</button>
+				)}
+				{seasonArr.map((season) => {
+					if (filterSeason.includes(season)) {
+						return (
+							<button
+								className="px-1 mr-2 bg-blue-300 rounded-sm"
+								onClick={() => handleSeasonFilter(season)}
+								key={season}
+							>
+								{season}
+							</button>
+						)
+					} else {
+						return (
+							<button className="px-1 mr-2" onClick={() => handleSeasonFilter(season)} key={season}>
+								{season}
+							</button>
+						)
+					}
+				})}
 			</div>
 
 			<Autosuggest

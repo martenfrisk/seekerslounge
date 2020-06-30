@@ -9,7 +9,7 @@ import loadable from '@loadable/component'
 
 import Sidebar from './components/Sidebar'
 // import Episode from './components/Episode'
-import Elastic from './Searchtest'
+import Elastic from './components/Elastic'
 const Episode = loadable(() => import ('./components/Episode'))
 
 const App = () => {	
