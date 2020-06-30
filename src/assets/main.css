@@ -653,6 +653,12 @@ video {
   background-color: rgba(144, 205, 244, var(--bg-opacity));
 }
 
+.bg-blue-400 {
+  --bg-opacity: 1;
+  background-color: #63b3ed;
+  background-color: rgba(99, 179, 237, var(--bg-opacity));
+}
+
 .bg-blue-700 {
   --bg-opacity: 1;
   background-color: #2b6cb0;
@@ -823,6 +829,10 @@ video {
   margin-bottom: 0.5rem;
 }
 
+.ml-2 {
+  margin-left: 0.5rem;
+}
+
 .mt-4 {
   margin-top: 1rem;
 }
@@ -846,6 +856,11 @@ video {
 .py-0 {
   padding-top: 0;
   padding-bottom: 0;
+}
+
+.px-1 {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
 }
 
 .py-2 {

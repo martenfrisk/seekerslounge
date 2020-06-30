@@ -29,7 +29,7 @@ const App = () => {
 			{eps.map(item => {
 				let epName = item.slice(0, -5)
 				return (
-				<Route path={`/ep/${epName}`}>
+				<Route path={`/ep/${epName}`} key={epName}>
 				<div className="w-full h-auto mt-0 md:w-3/4">
 					<Episode props={item} />
 					</div>

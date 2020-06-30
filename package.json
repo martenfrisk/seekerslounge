@@ -30,7 +30,7 @@
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "predeploy": "yarn run build",
     "deploy": "gh-pages -d build",
-    "start": "yarn run build:css && react-scripts start",
+    "start": "yarn run watch:css && react-scripts start",
     "build": "yarn run build:css && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

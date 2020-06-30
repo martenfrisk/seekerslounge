@@ -81,7 +81,7 @@ const Sidebar = ({ history }) => {
 				</div>
 				{infoView && (
 					<div>
-						<p>
+						<div>
 							<p className="my-4">Now includes ALL episodes!</p>
 							<p className="my-4">Getting no results? Try adding spaces, e.g. cheetahman -{">"} cheetah man</p>
 							<p className="my-4">
@@ -89,7 +89,7 @@ const Sidebar = ({ history }) => {
 								for accurate timestamp. Uncommon phrases (e.g. "Podd Tadre") may not show up. Try searching
 								phonetically.
 							</p>
-						</p>
+						</div>
 
 						<div>
 							Want to help out? Click{' '}
