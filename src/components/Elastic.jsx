@@ -116,21 +116,68 @@ const Elastic = (props) => {
 
 
 	const sortSuggestions = (suggestions) => {
-		if (filterSeason.includes('all')) {
-			return suggestions
-		} else if (filterSeason.length === 0) {
-			toggleAll()
-			return suggestions
+		if (suggestions) { 
+			if (filterSeason.includes('all')) {
+				return suggestions
+			} else if (filterSeason.length === 0) {
+				toggleAll()
+				return suggestions
+			} else {
+				let filteredSuggestions = []
+				suggestions.forEach((ep) => {
+					let epSeason = ep.episode.slice(0, 3)
+					if (filterSeason.includes(epSeason)) {
+						filteredSuggestions.push(ep)
+					}
+				})
+				return filteredSuggestions
+			} 
 		} else {
-			let filteredSuggestions = []
-			suggestions.forEach((ep) => {
-				let epSeason = ep.episode.slice(0, 3)
-				if (filterSeason.includes(epSeason)) {
-					filteredSuggestions.push(ep)
+			return []
+		}
+	}
+
+
+	const onSuggestionFetchFuzzy = ({ value }) => {
+		axios
+			.post('https://search-seekerslounge-bfv6hl5b7dikv4ehjzd3gs4tsu.us-east-1.es.amazonaws.com/teach/_search', {
+				from: 0,
+				size: 499,
+				query: {
+					multi_match: {
+						query: value,
+						fields: [ 'line', 'episode' ],
+						fuzziness: 'AUTO'
+					}
 				}
 			})
-			return filteredSuggestions
-		}
+			.then((res) => {
+				const results = res.data.hits.hits.map((h) => h._source)
+				setSuggestions(() => results)
+			})
+	}
+	const onSuggestionFetchExact = ({ value }) => {
+		axios
+			.post('https://search-seekerslounge-bfv6hl5b7dikv4ehjzd3gs4tsu.us-east-1.es.amazonaws.com/teach/_search', {
+				from: 0,
+				size: 499,
+				query: {
+					multi_match: {
+						query: value,
+						fields: [ 'line', 'episode' ],
+						type: 'phrase',
+						operator: 'and'
+					}
+				}
+			})
+			.then((res) => {
+				const results = res.data.hits.hits.map((h) => h._source)
+				setSuggestions(() => results)
+			})
+	}
+
+	const onSuggestionsClearRequested = () => {
+		return null
 	}
 
 	const renderSuggestion = (suggestion, { query }) => {
@@ -182,60 +229,13 @@ const Elastic = (props) => {
 			</LazyLoad>
 		)
 	}
-
-	const onSuggestionFetchFuzzy = ({ value }) => {
-		axios
-			.post('https://search-seekerslounge-bfv6hl5b7dikv4ehjzd3gs4tsu.us-east-1.es.amazonaws.com/teach/_search', {
-				from: 0,
-				size: 499,
-				query: {
-					multi_match: {
-						query: value,
-						fields: [ 'line', 'episode' ],
-						fuzziness: 'AUTO'
-					}
-				}
-			})
-			.then((res) => {
-				const results = res.data.hits.hits.map((h) => h._source)
-				setSuggestions(() => results)
-			})
-	}
-	const onSuggestionFetchExact = ({ value }) => {
-		axios
-			.post('https://search-seekerslounge-bfv6hl5b7dikv4ehjzd3gs4tsu.us-east-1.es.amazonaws.com/teach/_search', {
-				from: 0,
-				size: 499,
-				query: {
-					multi_match: {
-						query: value,
-						fields: [ 'line', 'episode' ],
-						type: 'phrase',
-						operator: 'and'
-					}
-				}
-			})
-			.then((res) => {
-				const results = res.data.hits.hits.map((h) => h._source)
-				setSuggestions(() => results)
-			})
-	}
-
-	const onSuggestionsClearRequested = () => {
-		return null
-	}
-
-	const getSuggestionValue = (suggestion) => {
-		return value
-	}
+	const getSuggestionValue = suggestions => value
 
 	const inputProps = {
 		placeholder: 'Search',
 		value,
 		autoFocus: true,
-		onChange: (_, { newValue, method }) => {
-			setValue(newValue)
-		}
+		onChange: (_, { newValue }) => setValue(newValue)
 	}
 
 	const handleCheckbox = () => {
