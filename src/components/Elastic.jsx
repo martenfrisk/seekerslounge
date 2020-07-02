@@ -64,6 +64,9 @@ const Elastic = (props) => {
 			setFilterSeason(() =>
 				qs.parse(history.location.search)['s'] !== undefined ? 
 				qs.parse(history.location.search)['s'].split(',') : ['all'])
+			setExact(() => 
+				qs.parse(history.location.search)['exact'] ? true : false			
+			)
 			// let seasons = history.location.pathname
 			// seasons.slice(1).split(',').forEach((seas) => {
 			// 	if (seas !== 'all') {
@@ -77,11 +80,12 @@ const Elastic = (props) => {
 	useEffect(() => {
 			let seasons = filterSeason.join(',')
 			let setValue = value !== 'undefined' ? value : initValue
+			let isExact = exact ? 'exact' : 'fuzzy'
 			history.replace({
-				search: '?' + new URLSearchParams({q: setValue}) + '&s=' + seasons
+				search: '?' + isExact + '&' + new URLSearchParams({q: setValue}) + '&s=' + seasons
 			})
 		},
-		[value, filterSeason, initValue, history]
+		[value, filterSeason, initValue, exact, history]
 	)
 	
 	const toggleAll = () => {
