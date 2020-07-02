@@ -792,11 +792,6 @@ video {
   margin-bottom: 0.5rem;
 }
 
-.mx-2 {
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-}
-
 .my-4 {
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -1032,6 +1027,16 @@ video {
 
   .md\:text-lg {
     font-size: 1.125rem;
+  }
+
+  .md\:my-0 {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .md\:mx-2 {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
   }
 
   .md\:mb-0 {

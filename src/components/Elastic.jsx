@@ -45,9 +45,7 @@ function getRandomInt(max) {
 const Elastic = (props) => {
 	let initValue = randomQuery[getRandomInt(randomQuery.length)]
 	const { history } = props
-	const [ value, setValue ] = useState(
-		history.location.search ? qs.parse(history.location.search)['?q'] : initValue
-	)
+	const [ value, setValue ] = useState(initValue)
 	const [ suggestions, setSuggestions ] = useState([])
 	const [ exact, setExact ] = useState(false)
 	const [ showExactInfo, setShowExactInfo ] = useState(false)
@@ -55,17 +53,15 @@ const Elastic = (props) => {
 		qs.parse(history.location.search)['s'] !== undefined ? 
 		qs.parse(history.location.search)['s'].split(',') : ['all']
 	)
-	// console.log(filterSeason)
-	// 	qs.parse(history.location.search)['?s'] ? qs.parse(history.location.search)['s'] : ['all']
-	// )
 	const [ , forceUpdate ] = useReducer((x) => x + 1, 0)
 
 	useEffect(
 		() => {
-			// console.log(history.location)
-			setValue(qs.parse(history.location.search)['?q'])
-			// console.log(qs.parse(history.location.search))
-			setFilterSeason(
+			setValue(() => 
+				qs.parse(history.location.search)['?q'] !== undefined ?
+				qs.parse(history.location.search)['?q'] : value
+				)
+			setFilterSeason(() =>
 				qs.parse(history.location.search)['s'] !== undefined ? 
 				qs.parse(history.location.search)['s'].split(',') : ['all'])
 			// let seasons = history.location.pathname
@@ -76,19 +72,16 @@ const Elastic = (props) => {
 			// })
 			// forceUpdate()
 		},
-		[ history ]
+		[history, value]
 	)
-	useEffect(
-		() => {
+	useEffect(() => {
 			let seasons = filterSeason.join(',')
+			let setValue = value !== 'undefined' ? value : initValue
 			history.replace({
-				// hash: filterSeason.toString(),
-				search: '?' + new URLSearchParams({ 
-					q: value, 
-				}) + '&s=' + seasons
+				search: '?' + new URLSearchParams({q: setValue}) + '&s=' + seasons
 			})
 		},
-		[ value, history, filterSeason ]
+		[value, filterSeason, initValue, history]
 	)
 	
 	const toggleAll = () => {
@@ -104,16 +97,6 @@ const Elastic = (props) => {
 			setFilterSeason(filterSeason => filterSeason.filter(p => p !== season))	
 		}
 	}
-
-
-	// useEffect(
-	// 	() => {
-			
-	// 		forceUpdate()
-	// 	},
-	// 	[ history ]
-	// )
-
 
 	const sortSuggestions = (suggestions) => {
 		if (suggestions) { 
@@ -139,8 +122,7 @@ const Elastic = (props) => {
 
 
 	const onSuggestionFetchFuzzy = ({ value }) => {
-		axios
-			.post('https://search-seekerslounge-bfv6hl5b7dikv4ehjzd3gs4tsu.us-east-1.es.amazonaws.com/teach/_search', {
+		axios.post('https://search-seekerslounge-bfv6hl5b7dikv4ehjzd3gs4tsu.us-east-1.es.amazonaws.com/teach/_search', {
 				from: 0,
 				size: 499,
 				query: {
@@ -153,12 +135,12 @@ const Elastic = (props) => {
 			})
 			.then((res) => {
 				const results = res.data.hits.hits.map((h) => h._source)
-				setSuggestions(() => results)
+				setSuggestions(() => results)	
 			})
 	}
+	
 	const onSuggestionFetchExact = ({ value }) => {
-		axios
-			.post('https://search-seekerslounge-bfv6hl5b7dikv4ehjzd3gs4tsu.us-east-1.es.amazonaws.com/teach/_search', {
+		axios.post('https://search-seekerslounge-bfv6hl5b7dikv4ehjzd3gs4tsu.us-east-1.es.amazonaws.com/teach/_search', {
 				from: 0,
 				size: 499,
 				query: {
@@ -172,7 +154,7 @@ const Elastic = (props) => {
 			})
 			.then((res) => {
 				const results = res.data.hits.hits.map((h) => h._source)
-				setSuggestions(() => results)
+				setSuggestions(() => results)	
 			})
 	}
 
@@ -229,13 +211,13 @@ const Elastic = (props) => {
 			</LazyLoad>
 		)
 	}
-	const getSuggestionValue = suggestions => value
+	const getSuggestionValue = suggestions => value.toString()
 
 	const inputProps = {
 		placeholder: 'Search',
 		value,
 		autoFocus: true,
-		onChange: (_, { newValue }) => setValue(newValue)
+		onChange: (_, { newValue }) => setValue(() => newValue.toString())
 	}
 
 	const handleCheckbox = () => {
@@ -260,7 +242,7 @@ const Elastic = (props) => {
 	
 	return (
 		<div>
-			<div className="flex items-center px-8 md:mt-8">
+			<div className="flex flex-wrap items-center px-8 md:mt-8">
 				<button className="px-2 mr-2 text-sm text-white bg-blue-700 rounded" onClick={handleRandom}>
 					Get random query
 				</button>
@@ -269,10 +251,10 @@ const Elastic = (props) => {
 				</label>
 				<input id="check" type="checkbox" onChange={handleCheckbox} checked={exact} />
 				{showExactInfo && (
-					<div className="px-2 mx-2 text-sm text-white bg-red-700 rounded">Click the search bar</div>
+					<div className="px-2 my-2 text-sm text-white bg-red-700 rounded md:mx-2 md:my-0">Click the search bar. Might take a second to get fetch new results.</div>
 				)}
 			</div>
-			<div className="flex w-full px-8 mt-2 mb-2 text-sm">
+			<div className="flex flex-wrap w-full px-8 mt-2 mb-2 text-sm">
 				{suggestions && <p>{sortSuggestions(suggestions).length} results for&nbsp;</p>}
 				{value && <p>'{value}'&nbsp;</p>}
 				{exact ? <p>(exact search)</p> : <p>(fuzzy search)</p>}
@@ -310,7 +292,7 @@ const Elastic = (props) => {
 					}
 				})}
 			</div>
-
+<form>
 			<Autosuggest
 				suggestions={sortSuggestions(suggestions)}
 				onSuggestionsFetchRequested={exact ? onSuggestionFetchExact : onSuggestionFetchFuzzy}
@@ -322,6 +304,8 @@ const Elastic = (props) => {
 				alwaysRenderSuggestions={true}
 				autoFocus={true}
 			/>
+
+</form>
 		</div>
 	)
 }
