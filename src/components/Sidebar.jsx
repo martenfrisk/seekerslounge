@@ -4,63 +4,62 @@ import { Link, withRouter } from 'react-router-dom'
 import Pot from '../img/coffee.svg'
 import '../App.css'
 
-import epList from '../assets/episodes.json'
-import { eps as episodes } from '../assets/episodelist'
+// import epList from '../assets/episodes.json'
+// import { eps as episodes } from '../assets/episodelist'
 
-const EpisodeLinks = () => {
-	return (
-		<div>
-			{episodes.map((item) => {
-				let epName = item.slice(0, -5)
-				let epTitle = epList.find((x) => x.ep === epName)
-				return (
-					<div className="flex flex-wrap my-2" key={epName}>
-						<Link
-							to={{
-								pathname: `/ep/${epName}`,
-								hash: `#${epName}`
-							}}
-						>
-							<div className="w-16 mr-1 text-xs text-center bg-blue-100 rounded">{epName}</div>
-							<div className="w-full text-sm">{epTitle.title}</div>
-						</Link>
-					</div>
-				)
-			})}
-		</div>
-	)
-}
+// const EpisodeLinks = () => {
+// 	return (
+// 		<div>
+// 			{episodes.map((item) => {
+// 				let epName = item.slice(0, -5)
+// 				let epTitle = epList.find((x) => x.ep === epName)
+// 				return (
+// 					<div className="flex flex-wrap my-2" key={epName}>
+// 						<Link
+// 							to={{
+// 								pathname: `/ep/${epName}`,
+// 								hash: `#${epName}`
+// 							}}
+// 						>
+// 							<div className="w-16 mr-1 text-xs text-center bg-blue-100 rounded">{epName}</div>
+// 							<div className="w-full text-sm">{epTitle.title}</div>
+// 						</Link>
+// 					</div>
+// 				)
+// 			})}
+// 		</div>
+// 	)
+// }
 
 const Sidebar = ({ history }) => {
 	const [ infoView, setInfoView ] = useState(true)
 	const [ moreInfo, setMoreInfo ] = useState(false)
 	const [ copyright, setCopyright ] = useState(false)
-	const [ eps, setEps ] = useState(false)
+	// const [ eps, setEps ] = useState(false)
 	const handleInfoView = () => setInfoView((prev) => !prev)
 	const handleMoreInfo = () => setMoreInfo((prev) => !prev)
 	const handleCopyright = () => setCopyright((prev) => !prev)
-	const handleEps = () => setEps((prev) => !prev)
-	
+	// const handleEps = () => setEps((prev) => !prev)
+
 	let width = window.innerWidth
 
 	useEffect(
 		() => {
 			if (width > 768) {
-				setEps(() => true)
+				setInfoView(() => true)
 			} else {
-				setEps(() => false)
 				setInfoView(() => false)
 			}
 		},
 		[ width ]
 	)
-	useEffect(
-		() =>
-			history.listen(() => {
-				setEps(() => false)
-			}),
-		[ history ]
-	)
+	// useEffect(
+	// 	() =>
+	// 		history.listen(() => {
+	// 			setInfoView(() => false)
+	// 		}),
+	// 	[ history ]
+	// )
 	return (
 		<div className="sticky w-full py-0 mt-0 md:mb-0 md:w-1/4 md:max-w-sm ">
 			<div className="flex items-end justify-end h-16 pr-3 mt-0 text-2xl text-gray-800 bg-blue-300 md:h-40">
@@ -72,22 +71,49 @@ const Sidebar = ({ history }) => {
 					<div className="text-xs text-blue-900">a Teachers' Lounge search engine</div>
 				</div>
 			</div>
-			<div className="w-full h-auto px-4 py-4 font-sans leading-relaxed text-justify md:mt-4 md:px-6">
-				<div
-					onClick={handleInfoView}
+			<div className="flex">
+				<div className="w-1/3 px-3 py-2 text-center text-white bg-blue-600 border-r border-white">
+					<Link to="/eplist">
+						<button className="text-white border-b border-blue-600 border-dashed hover:border-white">Episodes</button>
+					</Link>
+				</div>
+				<div className="w-1/3 px-3 py-2 text-center text-white bg-blue-600 border-l border-white">
+					<Link to="/">
+						<button className="text-white border-b border-blue-600 border-dashed hover:border-white">Search</button>
+					</Link>
+				</div>
+				<div className="w-1/3 px-3 py-2 text-center bg-gray-100 border-l border-gray-700" onClick={handleInfoView}>
+					{!infoView ? (
+						<div className="flex justify-center">
+							<p className="border-b border-white border-dashed cursor-pointer hover:border-black">Info&nbsp;&#9662;</p>
+						</div>
+					) : (
+						<div className="flex justify-center">
+						<p className="border-b border-white border-dashed cursor-pointer hover:border-black">
+						Info&nbsp;&#9652;
+						</p>
+						</div>
+					)}
+				</div>
+			</div>
+			<div className="w-full h-auto px-4 py-4 font-sans leading-relaxed text-justify md:px-6">
+				{/* <div
+				
 					className="mb-4 text-xs text-center text-gray-700 border-b-2 border-gray-300 border-dashed cursor-pointer"
 				>
 					{!infoView ? <div>&#9662;&nbsp;show info</div> : <div>&#9652;&nbsp;hide info</div>}
-				</div>
+				</div> */}
 				{infoView && (
 					<div>
 						<div>
-							<p className="my-4">Now includes ALL episodes!</p>
-							<p className="my-4">Getting no results? Try adding spaces, e.g. cheetahman -{">"} cheetah man</p>
+							<p className="mb-4">Now includes ALL episodes!</p>
 							<p className="my-4">
-								Transcripts are unedited. Speakers not identified. Intro has been removed so add ~30 seconds
-								for accurate timestamp. Uncommon phrases (e.g. "Podd Tadre") may not show up. Try searching
-								phonetically.
+								Getting no results? Try adding spaces, e.g. cheetahman -{'>'} cheetah man
+							</p>
+							<p className="my-4">
+								Transcripts are unedited. Speakers not identified. Intro has been removed so add ~30
+								seconds for accurate timestamp. Uncommon phrases (e.g. "Podd Tadre") may not show up.
+								Try searching phonetically.
 							</p>
 						</div>
 
@@ -129,16 +155,21 @@ const Sidebar = ({ history }) => {
 									holders (probably Big Grande and Earwolf). Want to contact me? I'll see your ass in
 									court (or message me on reddit, u/martanor)
 								</p>
-								<p>Build with React, powered by Algolia Search, styled using Tailwind CSS.</p>
+								<p>Build with React, powered by ElasticSearch, styled using Tailwind CSS.</p>
 							</div>
 						)}
 
-						<div className="sticky">
+						{/* <div className="sticky">
 							<div onClick={handleEps} className="inline-block border-b border-dotted cursor-pointer">
 								Episode list&nbsp;&#9662;
+								<Link
+							to="/eplist"
+						>
+							<div className="w-full text-sm">All episodes</div>
+						</Link>
 							</div>
 							{eps && <EpisodeLinks />}
-						</div>
+						</div> */}
 					</div>
 				)}
 			</div>

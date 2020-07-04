@@ -14,7 +14,9 @@ module.exports = {
     extend: {},
   },
   variants: {
-    backgroundColor: ['odd', 'even']
+    backgroundColor: ['odd', 'even', 'hover'],
+    borderStyle: ['hover'],
+    borderWidth: ['hover']
   },
   plugins: [],
 }
