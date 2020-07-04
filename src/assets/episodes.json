@@ -324,6 +324,12 @@
     "date": "Wed, 24 Jun 2020 21:00:00 -0700"
   },
   {
+    "ep": "mini-55",
+    "title": "Charity Auction",
+    "desc": "The Teachers offer themselves as dates in a charity auction.",
+    "date": "Wed, 01 Jul 2020 21:00:00 -0700"
+  },
+  {
     "ep": "s01e01",
     "title": "They're Pine, Nuts with Klaus Kendall (Paul F. Tompkins)",
     "desc": "In the pilot episode of Hamilton High School's first, best, and only podcast hosted by teachers tackling issues about the Hamilton community, Mr. Cravy, Mr. Levi's, Mr. Padre, and Mr. Weatherman discuss some pet peeves, the perils of boogie boarding, and Mr. Levi's announces his mayoral campaign. Then, shop teacher Klaus Kendall (Paul F. Tompkins) comes by to share his deep respect for wood and hatred of animal.",
@@ -904,6 +910,12 @@
     "title": "The Book Of Hairman",
     "desc": "The teachers (and Mike Ehrmentraut) recap Hamilton's graduation ceremony, including their wardrobe malfunctions and hot mic moments, and finally say goodbye to the podcast. ",
     "date": "Wed, 24 Jun 2020 00:00:09 -0700"
+  },
+  {
+    "ep": "s09e40",
+    "title": "Epilogue: All Will Be Revealed",
+    "desc": "In 2034, the former hosts of the Teachers Lounge reunite for Todd's funeral, which he is directing himself from beyond the grave.  ",
+    "date": "Tue, 30 Jun 2020 21:00:00 -0700"
   },
   {
     "ep": "Peecast",

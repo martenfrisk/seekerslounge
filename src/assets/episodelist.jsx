@@ -53,6 +53,7 @@ export const eps = [
 "mini-52.json",
 "mini-53.json",
 "mini-54.json",
+"mini-55.json",
 "s01e01.json",
 "s01e02.json",
 "s01e03.json",
@@ -150,5 +151,6 @@ export const eps = [
 "s09e37.json",
 "s09e38.json",
 "s09e39.json",
+"s09e40.json",
 "Peecast.json"
 ]

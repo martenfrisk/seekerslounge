@@ -25,7 +25,8 @@
     "react-router-hash-link": "^1.2.2",
     "react-scripts": "^3.4.1",
     "source-map-explorer": "^2.4.2",
-    "tailwindcss": "^1.4.6"
+    "tailwindcss": "^1.4.6",
+    "throttle-debounce": "^2.2.1"
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",

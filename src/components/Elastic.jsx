@@ -2,7 +2,7 @@ import React, { useState, useReducer, useEffect } from 'react'
 import Autosuggest from 'react-autosuggest'
 import axios from 'axios'
 import LazyLoad from 'react-lazyload'
-// import { debounce } from 'throttle-debounce'
+// import { throttle, debounce } from 'throttle-debounce'
 import AutosuggestHighlightMatch from 'autosuggest-highlight/match'
 import AutosuggestHighlightParse from 'autosuggest-highlight/parse'
 import './Search.css'
@@ -45,7 +45,7 @@ function getRandomInt(max) {
 const Elastic = (props) => {
 	let initValue = randomQuery[getRandomInt(randomQuery.length)]
 	const { history } = props
-	const [ value, setValue ] = useState(initValue)
+	const [ value, setValue ] = useState(history.location.search ? qs.parse(history.location.search)['q'] : initValue)
 	const [ suggestions, setSuggestions ] = useState([])
 	const [ exact, setExact ] = useState(false)
 	const [ showExactInfo, setShowExactInfo ] = useState(false)
@@ -57,16 +57,17 @@ const Elastic = (props) => {
 
 	useEffect(
 		() => {
-			setValue(() => 
+
+				setValue(() => 
 				qs.parse(history.location.search)['?q'] !== undefined ?
 				qs.parse(history.location.search)['?q'] : value
 				)
-			setFilterSeason(() =>
+				setFilterSeason(() =>
 				qs.parse(history.location.search)['s'] !== undefined ? 
 				qs.parse(history.location.search)['s'].split(',') : ['all'])
-			setExact(() => 
+				setExact(() => 
 				qs.parse(history.location.search)['exact'] ? true : false			
-			)
+				)
 			// let seasons = history.location.pathname
 			// seasons.slice(1).split(',').forEach((seas) => {
 			// 	if (seas !== 'all') {
@@ -79,13 +80,15 @@ const Elastic = (props) => {
 	)
 	useEffect(() => {
 			let seasons = filterSeason.join(',')
-			let setValue = value !== 'undefined' ? value : initValue
+			let setValue = value !== 'undefined' ? value : ''
 			let isExact = exact ? 'exact' : 'fuzzy'
+			
 			history.replace({
 				search: '?' + isExact + '&' + new URLSearchParams({q: setValue}) + '&s=' + seasons
 			})
+			
 		},
-		[value, filterSeason, initValue, exact, history]
+		[value, filterSeason, exact, history]
 	)
 	
 	const toggleAll = () => {
@@ -125,28 +128,29 @@ const Elastic = (props) => {
 	}
 
 
-	const onSuggestionFetchFuzzy = ({ value }) => {
-		axios.post('https://search-seekerslounge-bfv6hl5b7dikv4ehjzd3gs4tsu.us-east-1.es.amazonaws.com/teach/_search', {
-				from: 0,
-				size: 499,
-				query: {
-					multi_match: {
-						query: value,
-						fields: [ 'line', 'episode' ],
-						fuzziness: 'AUTO'
-					}
+
+	const onSuggestionFetchFuzzy = async ({ value }) => {
+		await axios.post('https://search-seekerslounge-bfv6hl5b7dikv4ehjzd3gs4tsu.us-east-1.es.amazonaws.com/teach/_search', {
+			from: 0,
+			size: 99,
+			query: {
+				multi_match: {
+					query: value,
+					fields: [ 'line', 'episode' ],
+					fuzziness: 'AUTO'
 				}
-			})
-			.then((res) => {
-				const results = res.data.hits.hits.map((h) => h._source)
-				setSuggestions(() => results)	
-			})
+			}
+		})
+		.then((res) => {
+			const results = res.data.hits.hits.map((h) => h._source)
+			setSuggestions(() => results)	
+		})
 	}
 	
-	const onSuggestionFetchExact = ({ value }) => {
-		axios.post('https://search-seekerslounge-bfv6hl5b7dikv4ehjzd3gs4tsu.us-east-1.es.amazonaws.com/teach/_search', {
+	const onSuggestionFetchExact = async ({ value }) => {
+				await axios.post('https://search-seekerslounge-bfv6hl5b7dikv4ehjzd3gs4tsu.us-east-1.es.amazonaws.com/teach/_search', {
 				from: 0,
-				size: 499,
+				size: 99,
 				query: {
 					multi_match: {
 						query: value,
@@ -212,16 +216,16 @@ const Elastic = (props) => {
 					})}
 				</div>
 			</div>
-			</LazyLoad>
+		</LazyLoad>
 		)
 	}
-	const getSuggestionValue = suggestions => value.toString()
+	const getSuggestionValue = suggestions => value
 
 	const inputProps = {
 		placeholder: 'Search',
 		value,
 		autoFocus: true,
-		onChange: (_, { newValue }) => setValue(() => newValue.toString())
+		onChange: (_, { newValue }) => setValue(() => newValue)
 	}
 
 	const handleCheckbox = () => {
@@ -296,7 +300,7 @@ const Elastic = (props) => {
 					}
 				})}
 			</div>
-<form>
+{/* <form> */}
 			<Autosuggest
 				suggestions={sortSuggestions(suggestions)}
 				onSuggestionsFetchRequested={exact ? onSuggestionFetchExact : onSuggestionFetchFuzzy}
@@ -309,7 +313,7 @@ const Elastic = (props) => {
 				autoFocus={true}
 			/>
 
-</form>
+{/* </form> */}
 		</div>
 	)
 }
