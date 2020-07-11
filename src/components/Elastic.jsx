@@ -186,6 +186,7 @@ const Elastic = (props) => {
 						<div className="text-sm text-gray-800 md:text-base">{epName.title}</div>
 					</div>
 					<div className="flex items-center font-mono text-right text-gray-600">
+					<div className="mr-2 font-sans text-black">{suggestion.speaker}</div>
 						<div className="mr-2 font-sans text-right text-blue-600 border-b-2 border-dotted">
 							<Link
 								to={{
