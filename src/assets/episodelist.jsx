@@ -152,5 +152,6 @@ export const eps = [
 "mini-52.json",
 "mini-53.json",
 "mini-54.json",
-"mini-55.json"
+"mini-55.json",
+"mini-56.json"
 ]
