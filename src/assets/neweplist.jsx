@@ -922,5 +922,11 @@ export const eps = [
     "title": "Charity Auction",
     "desc": "The Teachers offer themselves as dates in a charity auction.",
     "date": "Wed, 01 Jul 2020 21:00:00 -0700"
+  },
+  {
+    "ep": "mini-56",
+    "title": "Doctor's Office",
+    "desc": "Three men loiter around a local doctor's office waiting room.",
+    "date": "Wed, 08 Jul 2020 21:00:00 -0700"
   }
  ]
