@@ -91,9 +91,9 @@ const Sidebar = () => {
 								You can find the unedited transcripts here:{' '}
 								<a
 									className="text-xs text-blue-600"
-									href="https://github.com/martenfrisk/seekerslounge/tree/master/transcripts"
+									href="https://github.com/martenfrisk/seekerslounge/tree/master/src/transcripts"
 								>
-									github.com/martenfrisk/seekerslounge/tree/master/transcripts
+									github.com/martenfrisk/seekerslounge/tree/master/src/transcripts
 								</a>
 								<br />Edit the text and submit a pull request.<br />
 								<br />
