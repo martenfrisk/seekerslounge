@@ -5,15 +5,15 @@ import { eps } from './assets/episodelist'
 import loadable from '@loadable/component'
 
 import Sidebar from './components/Sidebar'
-import EpList from './components/EpList'
 // import Episode from './components/Episode'
 import Elastic from './components/Elastic'
+
+const EpList = loadable(() => import('./components/EpList'))
 const Episode = loadable(() => import('./components/Episode'))
 
 const App = () => {
 	return (
 		<div className="flex flex-col min-w-full md:flex-row">
-		{/* // <Switch> */}
 				<Sidebar />
 
 				<Route exact path="/">
@@ -41,7 +41,6 @@ const App = () => {
 				})}
 
 
-				{/* </Switch> */}
 			</div>
 	)
 }

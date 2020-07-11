@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { eps } from '../assets/neweplist'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 const EpList = () => {
 	const [ filterSeason, setFilterSeason ] = useState([ 'all' ])
@@ -36,6 +36,7 @@ const EpList = () => {
 						>
 							<div className="inline text-blue-600 border-b border-blue-400 border-dotted hover:border-b-2 hover:border-solid">
 								<span className="text-xl">{ep.ep}</span><span>: {ep.title}</span>
+								<p className="text-xs">(episode transcript)</p>
 							</div>
 						</Link>
 						<div className="mt-3">{ep.desc}</div>
@@ -44,6 +45,28 @@ const EpList = () => {
 			})
 		}
 	}
+
+	const { pathname, hash } = useLocation()
+
+  useEffect(() => {
+      // if not a hash link scroll to top
+      if(hash===''){
+          window.scrollTo(0, 0)
+      }
+      // else scroll to id
+      else{
+          setTimeout(
+              () => {
+                  const id = hash.replace('#:~:text=', '');
+                  const element = document.getElementById(id);
+                  if (element) {
+                      element.scrollIntoView();
+                  }
+              },
+              0
+          );
+      }
+  }, [pathname, hash]) // do this on route change
 
 	const handleSeasonFilter = (season) => {
 		if (filterSeason.includes('all')) {

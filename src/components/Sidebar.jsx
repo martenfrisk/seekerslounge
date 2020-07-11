@@ -4,42 +4,14 @@ import { Link, withRouter } from 'react-router-dom'
 import Pot from '../img/coffee.svg'
 import '../App.css'
 
-// import epList from '../assets/episodes.json'
-// import { eps as episodes } from '../assets/episodelist'
 
-// const EpisodeLinks = () => {
-// 	return (
-// 		<div>
-// 			{episodes.map((item) => {
-// 				let epName = item.slice(0, -5)
-// 				let epTitle = epList.find((x) => x.ep === epName)
-// 				return (
-// 					<div className="flex flex-wrap my-2" key={epName}>
-// 						<Link
-// 							to={{
-// 								pathname: `/ep/${epName}`,
-// 								hash: `#${epName}`
-// 							}}
-// 						>
-// 							<div className="w-16 mr-1 text-xs text-center bg-blue-100 rounded">{epName}</div>
-// 							<div className="w-full text-sm">{epTitle.title}</div>
-// 						</Link>
-// 					</div>
-// 				)
-// 			})}
-// 		</div>
-// 	)
-// }
-
-const Sidebar = ({ history }) => {
+const Sidebar = () => {
 	const [ infoView, setInfoView ] = useState(true)
 	const [ moreInfo, setMoreInfo ] = useState(false)
 	const [ copyright, setCopyright ] = useState(false)
-	// const [ eps, setEps ] = useState(false)
 	const handleInfoView = () => setInfoView((prev) => !prev)
 	const handleMoreInfo = () => setMoreInfo((prev) => !prev)
 	const handleCopyright = () => setCopyright((prev) => !prev)
-	// const handleEps = () => setEps((prev) => !prev)
 
 	let width = window.innerWidth
 
@@ -53,13 +25,7 @@ const Sidebar = ({ history }) => {
 		},
 		[ width ]
 	)
-	// useEffect(
-	// 	() =>
-	// 		history.listen(() => {
-	// 			setInfoView(() => false)
-	// 		}),
-	// 	[ history ]
-	// )
+	
 	return (
 		<div className="sticky w-full py-0 mt-0 md:mb-0 md:w-1/4 md:max-w-sm ">
 			<div className="flex items-end justify-end h-16 pr-3 mt-0 text-2xl text-gray-800 bg-blue-300 md:h-40">
@@ -97,12 +63,6 @@ const Sidebar = ({ history }) => {
 				</div>
 			</div>
 			<div className="w-full h-auto px-4 py-4 font-sans leading-relaxed text-justify md:px-6">
-				{/* <div
-				
-					className="mb-4 text-xs text-center text-gray-700 border-b-2 border-gray-300 border-dashed cursor-pointer"
-				>
-					{!infoView ? <div>&#9662;&nbsp;show info</div> : <div>&#9652;&nbsp;hide info</div>}
-				</div> */}
 				{infoView && (
 					<div>
 						<div>
@@ -158,18 +118,6 @@ const Sidebar = ({ history }) => {
 								<p>Build with React, powered by ElasticSearch, styled using Tailwind CSS.</p>
 							</div>
 						)}
-
-						{/* <div className="sticky">
-							<div onClick={handleEps} className="inline-block border-b border-dotted cursor-pointer">
-								Episode list&nbsp;&#9662;
-								<Link
-							to="/eplist"
-						>
-							<div className="w-full text-sm">All episodes</div>
-						</Link>
-							</div>
-							{eps && <EpisodeLinks />}
-						</div> */}
 					</div>
 				)}
 			</div>

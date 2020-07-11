@@ -180,7 +180,7 @@ const Elastic = (props) => {
 		return (
 			<LazyLoad>
 			<div className="min-w-full px-4 pb-6 mb-6 shadow-md">
-				<div className="flex flex-wrap items-center justify-between w-full mb-2 hover:translate-y-1 hover:border-gray-200 hover:border-2">
+				<div className="flex flex-wrap items-center justify-between w-full mb-2">
 					<div className="flex items-center">
 						<div className="pt-1 mr-2 text-xs text-gray-700 uppercase">{epName.ep}</div>
 						<div className="text-sm text-gray-800 md:text-base">{epName.title}</div>
@@ -190,7 +190,7 @@ const Elastic = (props) => {
 							<Link
 								to={{
 									pathname: `/ep/${epName.ep}`,
-									hash: `#${suggestion.time}`
+									hash: `#:~:text=${suggestion.time}`
 								}}
 							>
 								go to transcript
@@ -219,6 +219,9 @@ const Elastic = (props) => {
 		</LazyLoad>
 		)
 	}
+
+	
+
 	const getSuggestionValue = suggestions => value
 
 	const inputProps = {
