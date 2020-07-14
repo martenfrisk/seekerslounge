@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "24b4c9c8f45d7347444459bfd7690f8c",
+    "revision": "c00b634d34e13675c52f77b3d68831ef",
     "url": "/seekerslounge/index.html"
   },
   {
@@ -28,8 +28,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/seekerslounge/static/js/4.c4e1eac9.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "884d7f857cc91d017508",
-    "url": "/seekerslounge/static/js/5.e482ad84.chunk.js"
+    "revision": "6723071f527a5a73a8f5",
+    "url": "/seekerslounge/static/js/5.68760a2d.chunk.js"
   },
   {
     "revision": "c9dfe9d66b556e0d599b",
@@ -40,8 +40,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/seekerslounge/static/js/main.2b837000.chunk.js"
   },
   {
-    "revision": "3eeda4b525d398a3a27c",
-    "url": "/seekerslounge/static/js/runtime-main.fb51d386.js"
+    "revision": "2bbe52b593185de3f8d7",
+    "url": "/seekerslounge/static/js/runtime-main.80f07005.js"
   },
   {
     "revision": "3badc09577faa0f4fcacafd1c07514e2",
