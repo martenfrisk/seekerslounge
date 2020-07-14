@@ -66,7 +66,7 @@ const Sidebar = () => {
 				{infoView && (
 					<div>
 						<div>
-							<p className="mb-4">Now includes ALL episodes!</p>
+							<p className="mb-4 text-blue-800 underline"><Link to="/transcribe/">Try the experimental transcript editor!</Link></p>
 							<p className="my-4">
 								Getting no results? Try adding spaces, e.g. cheetahman -{'>'} cheetah man
 							</p>

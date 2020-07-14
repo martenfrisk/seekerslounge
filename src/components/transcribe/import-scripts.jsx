@@ -157,7 +157,11 @@ export const scripts = [
 
 const ImportScripts = (props) => {
   return <select className={ props.className } name={ props.name } value={ props.value } onChange={ props.handleChange }>
-    {scripts.map((i) => <option value={i}>{i}</option>)}
+    {scripts.map((i) => {
+      let url = 'https://raw.githubusercontent.com/martenfrisk/seekerslounge/master/src/transcriptsAWS/'
+      return(<option value={JSON.stringify(url + i)}>{i}</option>)
+    })
+    }
  </select>
 
 }

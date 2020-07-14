@@ -1,24 +1,22 @@
 import React from 'react'
 import TranscriptEditor from '@bbc/react-transcript-editor'
 import loadable from '@loadable/component'
-import SttTypeSelect from "./transcribe/select-stt-json-type";
-import ExportFormatSelect from "./transcribe/select-export-format";
-import ImportScripts, { scripts } from "./transcribe/import-scripts";
+import SttTypeSelect from './transcribe/select-stt-json-type'
+import ExportFormatSelect from './transcribe/select-export-format'
+import { scripts } from './transcribe/import-scripts'
 import {
-  // loadLocalSavedData,
-  // isPresentInLocalStorage,
-  localSave
-} from "./transcribe/local-storage";
+	// loadLocalSavedData,
+	// isPresentInLocalStorage,
+	localSave
+} from './transcribe/local-storage'
 import DEMO_TRANSCRIPT from '../assets/transcribeDemo/mini-52.json'
 import DEMO_MEDIA_URL from '../assets/transcribeDemo/mini-52-edit.mp3'
 
 scripts.forEach((i) => {
-  loadable(() => import('../transcriptsAWS/' + i))
+	loadable(() => import('../transcriptsAWS/' + i))
 })
 
 const DEMO_TITLE = 'Mini-52 - Post-game Conference Pt. 2'
-
-
 
 class Transcribe extends React.Component {
 	constructor(props) {
@@ -35,8 +33,8 @@ class Transcribe extends React.Component {
 			fileName: '',
 			autoSaveData: {},
 			autoSaveContentType: 'amazontranscribe',
-      autoSaveExtension: 'json',
-      transcriptLoad: {}
+			autoSaveExtension: 'json',
+			transcriptLoad: {}
 		}
 
 		this.transcriptEditorRef = React.createRef()
@@ -52,12 +50,12 @@ class Transcribe extends React.Component {
 		// 		sttType: 'amazontranscribe'
 		// 	})
 		// } else {
-			this.setState({
-				transcriptData: DEMO_TRANSCRIPT,
-				mediaUrl: DEMO_MEDIA_URL,
-				title: DEMO_TITLE,
-				sttType: 'amazontranscribe'
-			})
+		this.setState({
+			transcriptData: DEMO_TRANSCRIPT,
+			mediaUrl: DEMO_MEDIA_URL,
+			title: DEMO_TITLE,
+			sttType: 'amazontranscribe'
+		})
 		// }
 	}
 
@@ -81,13 +79,47 @@ class Transcribe extends React.Component {
 
 	handleLoadMediaUrl = () => {
 		const fileURL = prompt("Paste the URL you'd like to use here:")
-
+    
 		this.setState({
-			// transcriptData: DEMO_TRANSCRIPT,
+      // transcriptData: DEMO_TRANSCRIPT,
 			mediaUrl: fileURL
 		})
 	}
+  
+	handleLoadTranscriptURL = () => {
+    const fileURL = prompt("Enter filename followed by .json (i.e. s01e02.json)")
+    const file = "https://raw.githubusercontent.com/martenfrisk/seekerslounge/master/src/transcriptsAWS/" + fileURL + ".json"
+    fetch(file)
+      .then(res => res.json())
+      .then(data => this.setState({ transcriptData: data }))
 
+    // this.setState({
+    //   transcriptData: fileURL
+    // })
+		// if (fileURL.type === 'application/json') {
+		// 	const fileReader = new FileReader()
+
+		// 	fileReader.onload = (event) => {
+		// 		this.setState({
+		// 			transcriptData: JSON.parse(event.target.result)
+		// 		})
+		// 	}
+
+		// 	fileReader.readAsText(fileURL)
+		// } else {
+		// 	alert('Select a valid JSON file.')
+		// }
+	}
+	handleLoadTranscriptList = (event) => {
+    let file = event.target.value
+    // fetch(file)
+    //   .then(res => res.json())
+    //   .then(data => this.setState({ transcriptData: data }))
+      this.setState({
+        transcriptData: JSON.parse(file)
+      })
+
+	}
 	handleLoadTranscriptJson = (files) => {
 		const file = files[0]
 
@@ -116,15 +148,15 @@ class Transcribe extends React.Component {
 		this.setState({
 			spellCheck: e.target.checked
 		})
-  }
-  
-  handleTranscriptLoad = (event) => {
-    console.log(event)
-    this.setState({
-      transcriptLoad: event.target.value
-    })
-    console.log(this.state.transcriptLoad)
-  }
+	}
+
+	handleTranscriptLoad = (event) => {
+		console.log(event)
+		this.setState({
+			transcriptLoad: event.target.value
+		})
+		console.log(this.state.transcriptLoad)
+	}
 
 	// https://stackoverflow.com/questions/21733847/react-jsx-selecting-selected-on-selected-select-option
 	handleSttTypeChange = (event) => {
@@ -195,8 +227,28 @@ class Transcribe extends React.Component {
 		return (
 			<div className="px-2">
 				<div className="w-full text-2xl text-center">Transcript Editor</div>
-        <div className="w-1/2 pl-4 my-2 border-t border-b border-l-4 border-r border-red-700">This is an experimental transcript editor. Code is copied from the demo of <a href="https://github.com/bbc/react-transcript-editor" target="_blank" rel="noopener noreferrer">BBC react-transcript-editor</a>. Only tested with AWS Transcribe transcript files.</div>
-				<button onClick={() => this.loadDemo()} className="underline">Load Demo (might take a few seconds to load)</button>
+				<div className="w-full px-10 my-2 border-t border-b border-l-4 border-r border-red-700">
+					<p>
+						This is an experimental transcript editor. Code is copied from the demo of{' '}
+						<a
+							href="https://github.com/bbc/react-transcript-editor"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							BBC react-transcript-editor
+						</a>. Only tested with AWS Transcribe transcript files.
+					</p>
+					<p>
+						Due to copyright reasons I have not included any audio files. You'll have to provide these
+						yourself. I'd suggest using the Stitcher RSS feeds and grabbing the URLs directly from the RSS.
+					</p>
+          <p>
+            Prefered export format is 'Text file - with Speakers and Timecode'.
+          </p>
+				</div>
+				<button onClick={() => this.loadDemo()} className="underline">
+					Load Demo (might take a few seconds to load)
+				</button>
 				<div className="flex flex-wrap px-12 py-4">
 					<section className="flex flex-wrap w-1/2 pl-4 mb-4 border-l-8 border-blue-600">
 						<div className="w-full text-xl">Load Audio</div>
@@ -214,22 +266,27 @@ class Transcribe extends React.Component {
 					</section>
 
 					<section className="flex flex-wrap w-1/2 pl-4 mb-4 border-l-8 border-blue-600">
-						<label className="w-full text-xl">Load Transcript</label>
-						<div className="w-1/2 pl-4">Input format</div>
+						<div className="w-full text-xl">Load Transcript</div>
+						<div className="w-full pl-4 mb-1">Input format
 						<SttTypeSelect
-							className="w-1/2 border border-gray-500"
+							className="w-1/2 ml-4 border border-gray-500"
 							name={'sttType'}
 							value={this.state.sttType}
 							handleChange={this.handleSttTypeChange}
 						/>
-            <div className="w-1/2 pl-4 text-sm line-through">Choose transcript (doesn't work yet)</div>
-            <ImportScripts
+            </div>
+						<button
+							onClick={() => this.handleLoadTranscriptURL()}
+							className="w-full pl-4 mb-1 text-left underline"
+						>
+							Enter episode name (click me)
+						</button>
+            {/* <ImportScripts
               className="w-1/2 border border-gray-500"
-              name={'impScripts'}
-              value={this.state.transcriptLoad}
-              handleChange={this.handleTranscriptLoad}
-              disabled
-            />
+							name={'importScripts'}
+							value={this.state.transcriptData}
+							handleChange={this.handleLoadTranscriptList}
+              /> */}
 						<label className="pl-4 mb-1 mr-4" htmlFor="transcriptFile">
 							From Computer
 						</label>
@@ -244,17 +301,18 @@ class Transcribe extends React.Component {
 					<section className="flex flex-wrap w-1/2 pl-4 mb-4 border-l-8 border-blue-400">
 						<label className="w-full">Export Transcript</label>
 						<ExportFormatSelect
-							className="w-1/4 mr-2 border border-gray-500"
+							className="w-1/2 mr-2 border border-gray-500"
 							name={'exportFormat'}
 							value={this.state.exportFormat}
 							handleChange={this.handleExportFormatChange}
 						/>
-            {this.state.transcriptData !== null ?
-						<button onClick={() => this.exportTranscript()} className="underline">
-							Export File
-						</button> :
-            <div>Nothing to export</div>
-            }
+						{this.state.transcriptData !== null ? (
+							<button onClick={() => this.exportTranscript()} className="underline">
+								Export File
+							</button>
+						) : (
+							<div>Nothing to export</div>
+						)}
 					</section>
 
 					<section className="flex flex-wrap w-1/2 pl-4 mb-4 border-l-8 border-blue-400">
