@@ -8,6 +8,7 @@ import Sidebar from './components/Sidebar'
 // import Episode from './components/Episode'
 import Elastic from './components/Elastic'
 
+const Transcribe = loadable(() => import('./components/Transcribe'))
 const EpList = loadable(() => import('./components/EpList'))
 const Episode = loadable(() => import('./components/Episode'))
 
@@ -27,7 +28,12 @@ const App = () => {
 						<EpList />
 					</div>
 				</Route>
-
+				
+				<Route path="/transcribe/">
+					<div className="w-full h-auto mt-0 mb-10 md:w-3/4">
+						<Transcribe />
+					</div>
+				</Route>
 
 				{eps.map((item) => {
 					let epName = item.slice(0, -5)
