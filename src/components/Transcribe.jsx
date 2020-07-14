@@ -1,9 +1,7 @@
 import React from 'react'
 import TranscriptEditor from '@bbc/react-transcript-editor'
-import loadable from '@loadable/component'
 import SttTypeSelect from './transcribe/select-stt-json-type'
 import ExportFormatSelect from './transcribe/select-export-format'
-import { scripts } from './transcribe/import-scripts'
 import {
 	// loadLocalSavedData,
 	// isPresentInLocalStorage,
@@ -12,9 +10,6 @@ import {
 import DEMO_TRANSCRIPT from '../assets/transcribeDemo/mini-52.json'
 import DEMO_MEDIA_URL from '../assets/transcribeDemo/mini-52-edit.mp3'
 
-scripts.forEach((i) => {
-	loadable(() => import('../transcriptsAWS/' + i))
-})
 
 const DEMO_TITLE = 'Mini-52 - Post-game Conference Pt. 2'
 
@@ -88,7 +83,7 @@ class Transcribe extends React.Component {
   
 	handleLoadTranscriptURL = () => {
     const fileURL = prompt("Enter filename followed by .json (i.e. s01e02.json)")
-    const file = "https://raw.githubusercontent.com/martenfrisk/seekerslounge/master/src/transcriptsAWS/" + fileURL + ".json"
+    const file = "https://raw.githubusercontent.com/martenfrisk/seekersresources/master/" + fileURL.toLowerCase() + ".json"
     fetch(file)
       .then(res => res.json())
       .then(data => this.setState({ transcriptData: data }))
