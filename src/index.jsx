@@ -4,12 +4,12 @@ import './assets/main.css'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 import { HashRouter as Router, Route } from 'react-router-dom'
-import { withTracker } from './utils/withTracker'
+// import { withTracker } from './utils/withTracker'
 // import Searchtest from './Searchtest'
 
 ReactDOM.render(
 		<Router>
-			<Route path="/" component={withTracker(App)} />
+			<Route path="/" component={App} />
 		</Router>,
 	document.getElementById('root')
 )
