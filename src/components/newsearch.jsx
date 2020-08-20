@@ -40,8 +40,12 @@ function getRandomInt(max) {
 let seasonArr = [ 's01', 's02', 's03', 's04', 's05', 's06', 's07', 's08', 's09', 'min' ]
 
 const Search = ({ history }) => {
+	let initValue = randomQuery[getRandomInt(randomQuery.length)]
+
 	const [ results, setResults ] = useState([])
-	const [ searchValue, setSearchValue ] = useState(randomQuery[getRandomInt(randomQuery.length)])
+	const [ searchValue, setSearchValue ] = useState(
+		history.location.search ? qs.parse(history.location.search)['q'] : initValue
+	)
 	const [ searchDetails, setSearchDetails ] = useState()
 	const [ exact, setExact ] = useState(false)
 	const [ usedExact, setUsedExact ] = useState(false)
@@ -51,12 +55,44 @@ const Search = ({ history }) => {
 			: [ 'all' ]
 	)
 
+	useEffect(
+		() => {
+			setSearchValue(
+				() =>
+					qs.parse(history.location.search)['?q'] !== undefined
+						? qs.parse(history.location.search)['?q']
+						: searchValue
+			)
+			setFilterSeason(
+				() =>
+					qs.parse(history.location.search)['s'] !== undefined
+						? qs.parse(history.location.search)['s'].split(',')
+						: [ 'all' ]
+			)
+			setExact(() => (qs.parse(history.location.search)['exact'] ? true : false))
+		},
+		[ history, searchValue ]
+	)
+	useEffect(
+		() => {
+			let seasons = filterSeason.join(',')
+			let setSearchValue = searchValue !== 'undefined' ? searchValue : ''
+			let isExact = exact ? 'exact' : 'fuzzy'
+
+			history.replace({
+				search: '?' + isExact + '&' + new URLSearchParams({ q: setSearchValue }) + '&s=' + seasons
+			})
+		},
+		[ searchValue, filterSeason, exact, history ]
+	)
+
 	const goSearch = () => {
 		exact ? searchExact() : searchFuzzy()
 	}
 
 	useEffect(() => {
-		goSearch()
+    goSearch()
+    // eslint-disable-next-line
 	}, [])
 
 	const renderSuggestion = (suggestion, index) => {
@@ -68,7 +104,7 @@ const Search = ({ history }) => {
 
 		return (
 			<LazyLoad key={index}>
-				<div className="w-full px-4 pb-6 mb-6 shadow-md">
+				<div className="w-full px-4 pb-6 mb-6 shadow-md hover:bg-blue-100">
 					<div className="flex flex-wrap items-center justify-between w-full mb-2">
 						<div className="flex items-center">
 							<div className="pt-1 mr-2 text-xs text-gray-700 uppercase">{epName.ep}</div>
@@ -201,10 +237,10 @@ const Search = ({ history }) => {
 	return (
 		<React.Fragment>
 			<form className="flex flex-wrap items-center mb-4 md:m-4" onSubmit={handleSubmit}>
-				<span className="inline mr-1 text-sm">
+				<p className="w-full text-sm">
 					Search exact matches (click 'Search' after ticking box):&nbsp;
 					<input id="check" type="checkbox" className="inline" onChange={handleCheckbox} checked={exact} />
-				</span>
+				</p>
 
 				<input
 					onChange={handleChange}
@@ -258,7 +294,9 @@ const Search = ({ history }) => {
 					{searchDetails !== 0 &&
 						`${searchDetails} hits for "${searchValue}" using ${usedExact
 							? 'exact'
-							: 'fuzzy'} search in ${filterSeason.includes('all') ? 'all seasons' : filterSeason.map(s => s === 'min' ? ' mini' : ` ${s}`)}`}
+							: 'fuzzy'} search in ${filterSeason.includes('all')
+							? 'all seasons'
+							: filterSeason.map((s) => (s === 'min' ? ' mini' : ` ${s}`))}`}
 				</div>
 
 				{results.length !== 0 ? (
