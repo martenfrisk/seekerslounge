@@ -76,11 +76,11 @@ const Search = ({ history }) => {
 	useEffect(
 		() => {
 			let seasons = filterSeason.join(',')
-			let setSearchValue = searchValue !== 'undefined' ? searchValue : ''
+			let searchParam = searchValue !== 'undefined' ? searchValue : ''
 			let isExact = exact ? 'exact' : 'fuzzy'
 
 			history.replace({
-				search: '?' + isExact + '&' + new URLSearchParams({ q: setSearchValue }) + '&s=' + seasons
+				search: '?' + isExact + '&' + new URLSearchParams({ q: searchParam }) + '&s=' + seasons
 			})
 		},
 		[ searchValue, filterSeason, exact, history ]
@@ -131,11 +131,11 @@ const Search = ({ history }) => {
 						</div>
 					</div>
 					<div className="py-2 pl-4 mt-4 border-l-2 border-gray-400 md:text-lg">
-						{parts.map((part, index) => {
+						{parts.map((part, i) => {
 							const className = part.highlight ? 'text-blue-600 font-bold' : null
 
 							return (
-								<span className={className} key={index}>
+								<span className={className} key={i}>
 									{part.text}
 								</span>
 							)
@@ -161,8 +161,8 @@ const Search = ({ history }) => {
 			})
 			.then((res) => {
 				console.log(res)
-				const results = res.data.hits.hits.map((h) => h._source)
-				setResults(() => results)
+				const fetchRes = res.data.hits.hits.map((h) => h._source)
+				setResults(() => fetchRes)
 				setSearchDetails(() => res.data.hits.total.value)
 				console.log(results)
 				setUsedExact(false)
@@ -184,8 +184,8 @@ const Search = ({ history }) => {
 				}
 			})
 			.then((res) => {
-				const results = res.data.hits.hits.map((h) => h._source)
-				setResults(() => results)
+				const fetchRes = res.data.hits.hits.map((h) => h._source)
+				setResults(() => fetchRes)
 				setSearchDetails(() => res.data.hits.total.value)
 				setUsedExact(true)
 			})
@@ -195,9 +195,9 @@ const Search = ({ history }) => {
 		if (filterSeason.includes('all')) {
 			setFilterSeason(() => [ season ])
 		} else if (!filterSeason.includes(season)) {
-			setFilterSeason((filterSeason) => [ ...filterSeason, season ])
+			setFilterSeason((fs) => [ ...fs, season ])
 		} else {
-			setFilterSeason((filterSeason) => filterSeason.filter((p) => p !== season))
+			setFilterSeason((filseas) => filseas.filter((p) => p !== season))
 		}
 	}
 
