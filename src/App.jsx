@@ -5,7 +5,8 @@ import { eps } from './assets/episodelist'
 import loadable from '@loadable/component'
 
 import Sidebar from './components/Sidebar'
-import Search from './components/newsearch'
+import Algolia from './components/Algolia'
+// import Search from './components/newsearch'
 // import Episode from './components/Episode'
 // import Elastic from './components/Elastic'
 
@@ -20,7 +21,7 @@ const App = () => {
 
 			<Route exact path="/">
 				<div className="w-full h-auto mt-0 mb-10 md:w-3/4">
-					<Search />
+					<Algolia />
 				</div>
 			</Route>
 
