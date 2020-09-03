@@ -68,12 +68,8 @@ const Sidebar = () => {
 						<div>
 							<p className="mb-4 text-blue-800 underline"><Link to="/transcribe/">Try the experimental transcript editor!</Link></p>
 							<p className="my-4">
-								Getting no results? Try adding spaces, e.g. cheetahman -{'>'} cheetah man
-							</p>
-							<p className="my-4">
 								Transcripts are unedited. Speakers not identified. Intro has been removed so add ~30
-								seconds for accurate timestamp. Uncommon phrases (e.g. "Podd Tadre") may not show up.
-								Try searching phonetically.
+								seconds for accurate timestamp.
 							</p>
 						</div>
 
