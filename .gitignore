@@ -18,7 +18,9 @@
 .env.test.local
 .env.production.local
 seekerslounge.code-workspace
-
+/src/transcripts2
+/src/transcripts3
+upload.js
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
