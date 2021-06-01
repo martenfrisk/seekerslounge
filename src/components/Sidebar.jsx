@@ -66,7 +66,7 @@ const Sidebar = () => {
 				{infoView && (
 					<div>
 						<div>
-							<p className="mb-4 text-blue-800 underline"><Link to="/transcribe/">Try the experimental transcript editor!</Link></p>
+							<p className="mb-4 text-blue-800 underline">Thanks for using my silly website. This site will soon move to <a href="https://teacherslounge.pcast.site">teacherslounge.pcast.site</a> with improved performance and (hopefully) some new features. Feel free to test it out! Stay flippy!</p>
 							<p className="my-4">
 								Transcripts are unedited. Speakers not identified. Intro has been removed so add ~30
 								seconds for accurate timestamp.
