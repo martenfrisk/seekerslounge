@@ -6,7 +6,7 @@ import { eps } from "./assets/episodelist";
 import loadable from "@loadable/component";
 
 import Sidebar from "./components/Sidebar";
-import Algolia from "./components/Algolia";
+// import Algolia from "./components/Algolia";
 import toast, { Toaster } from "react-hot-toast";
 // import Search from './components/newsearch'
 // import Episode from './components/Episode'
@@ -21,8 +21,12 @@ const App = () => {
     toast.success(
       <div class="flex flex-col gap-2 ml-2 pl-2" style={{ padding: '6px', marginLeft: '4px' }}>
 				<p class="p-2">
-        Seekers' Lounge is moving! Try the new and improved site, now with a more memorable address:
+        Seekers' Lounge has moved! 
 				</p>
+        <p class="p-2 my-2">
+        You will now be redirected to the new and improved site:
+
+        </p>
         <a
           class="block text-blue-800 mt-2 text-xl underline"
           href="https://seekerslounge.pcast.site"
@@ -31,6 +35,9 @@ const App = () => {
         </a>
       </div>
     );
+    setTimeout(() => {
+      window.location.replace("https://seekerslounge.pcast.site");
+    }, 5000);
   }, []);
   return (
     <div className="flex flex-col w-screen md:flex-row">
@@ -38,7 +45,7 @@ const App = () => {
 
       <Route exact path="/">
         <div className="w-full h-auto mt-0 mb-10 md:w-3/4">
-          <Algolia />
+          {/* <Algolia /> */}
         </div>
       </Route>
 
@@ -65,12 +72,12 @@ const App = () => {
         );
       })}
       <Toaster toastOptions={{
-				position: 'top-right',
+				position: 'top-center',
 				duration: 9000,
 				
 				style: {
 					border: '1px solid #1D4ED8',
-					padding: '16px',
+					padding: '16px 3rem',
 				},
 				icon: '☕ ',
 			}} />
