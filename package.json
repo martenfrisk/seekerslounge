@@ -12,7 +12,7 @@
     "@testing-library/user-event": "^13.1.9",
     "algoliasearch": "^4.4.0",
     "autosuggest-highlight": "^3.1.1",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "depcheck": "^1.4.1",
     "fs": "^0.0.1-security",
     "meilisearch": "^0.18.2",
